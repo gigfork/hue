@@ -15,7 +15,6 @@
 ## limitations under the License.
 <%namespace name="edit" file="editor_components.mako" />
 <%namespace name="wrappers" file="header_footer.mako" />
-${wrappers.head('Change Owner / Group: ' + path.split('/')[-1], show_side_bar=False)}
 <%! from desktop.lib.django_util import extract_field_data %>
 
 <%
@@ -56,12 +55,18 @@ ${wrappers.head('Change Owner / Group: ' + path.split('/')[-1], show_side_bar=Fa
       % endif
     % endif
 </%def>
+  <form action="/filebrowser/chown?next=${next|u}" method="POST" enctype="multipart/form-data" class="form-stacked">
+ <div class="modal-header">
+        <a href="#" class="close">&times;</a>
+        <h3>Change Owner / Group: ${path}</h3>
+    </div>
 
 
 
-  <div class="well">
-    <form action="/filebrowser/chown?next=${next|u}" method="POST" enctype="multipart/form-data" class="form-stacked">
-    <h1>Change Owner / Group: ${path}</h1>
+    
+
+  <div class="change-owner-modal-body">
+
     ${edit.render_field(form["path"], hidden=True)}
 
     <label>User</label>
@@ -79,13 +84,14 @@ ${wrappers.head('Change Owner / Group: ' + path.split('/')[-1], show_side_bar=Fa
       % else:
         ${ selection("group", [group for group in form.all_groups if group in extra_params['current_user'].get_groups()], extract_field_data(form["group"])) }
       % endif
-    <div style="padding-top: 10px;">
+
+
+  </div>
+      <div class="modal-footer" style="padding-top: 10px;">
         <input class="btn primary" type="submit" value="Submit" />
         <a class="btn" href="${next|u}">Cancel</a>
     </div>
-    </form>
-  </div>
+  </form>
 
 
-<p class="alert-message block-message info">Note: Only the Hadoop superuser, on this FS "${extra_params['superuser']}", may change the owner of a file.</p>
-${wrappers.foot()}
+<!--<div class="alert-message info modal-footer">Note: Only the Hadoop superuser, on this FS "${extra_params['superuser']}", may change the owner of a file.</div>-->

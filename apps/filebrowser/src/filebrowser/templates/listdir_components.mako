@@ -82,7 +82,7 @@ from desktop.lib.django_util import reverse_with_get
         %>
   ## Since path is in unicode, Django and Mako handle url encoding and
   ## iri encoding correctly for us.
-        
+
         <% path = file['path'] %>
         <tr class="file-row" file-name="${display_name}">
           <td>
@@ -125,7 +125,8 @@ from desktop.lib.django_util import reverse_with_get
 
                 % endif
                 <a class="btn small rename" file-to-rename="${path}">Rename</a>
-                <a class="btn small" href="${reverse_with_get('filebrowser.views.chown',get=dict(path=path,user=file['stats']['user'],group=file['stats']['group'],next=current_request_path))}">Change Owner / Group</a>
+                <a class="btn small" onclick="openChownWindow('${path}','${file['stats']['user']}','${file['stats']['group']}','${current_request_path}')">Change Owner / Group</a>
+
                 <a class="btn small" href="${reverse_with_get('filebrowser.views.chmod',get=dict(path=path,mode=stringformat(file['stats']['mode'], "o"),next=current_request_path))}">Change Permissions</a>
                 <a class="btn small" href="${reverse_with_get('filebrowser.views.move',get=dict(src_path=path,mode=stringformat(file['stats']['mode'], "o"),next=current_request_path))}">Move</a>
 
@@ -239,9 +240,34 @@ from desktop.lib.django_util import reverse_with_get
     </form>
 </div>
 
+<!-- create directory modal -->
+<div id="change-owner-modal" class="modal hide fade">
+
+</div>
 
 
 <script type="text/javascript" charset="utf-8">
+    // ajax modal windows
+    function openChownWindow(path, user, group, next){
+        //alert('openChownWindow: ' + path + ',' + user + ',' + group + ',' + next)
+        ///filebrowser/chown/
+
+        $.ajax({
+            url: '/filebrowser/chown',
+            data: {'path':path, 'user':user, 'group' : group, 'next' : next},
+            beforeSend: function(xhr){
+                xhr.setRequestHeader("X-Requested-With", "Hue");
+            },
+            dataType: 'html',
+            success: function(data){
+                $('#change-owner-modal').html(data);
+                $('#change-owner-modal').modal('show');
+            }
+        });
+    }
+
+
+    //uploader
     var num_of_pending_uploads = 0;
     function createUploader(){
         var uploader = new qq.FileUploader({
@@ -319,7 +345,7 @@ from desktop.lib.django_util import reverse_with_get
         $('#create-directory-modal').modal('hide');
     })
     $('#create-directory-form').submit(function(){
-        
+
         if($('#new-directory-name-input').val()==''){
             $('#directory-name-required-alert').alert().show(250)
             return false;
@@ -347,7 +373,7 @@ from desktop.lib.django_util import reverse_with_get
             $(value).show(250);
         });
     })
- 
+
 </script>
 
 </%def>
