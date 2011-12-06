@@ -127,7 +127,7 @@ from desktop.lib.django_util import reverse_with_get
                 <a class="btn small rename" file-to-rename="${path}">Rename</a>
                 <a class="btn small" onclick="openChownWindow('${path}','${file['stats']['user']}','${file['stats']['group']}','${current_request_path}')">Change Owner / Group</a>
 
-                <a class="btn small" href="${reverse_with_get('filebrowser.views.chmod',get=dict(path=path,mode=stringformat(file['stats']['mode'], "o"),next=current_request_path))}">Change Permissions</a>
+                <a class="btn small" onclick="openChmodWindow('${path}','${stringformat(file['stats']['mode'], "o")}','${current_request_path}')">Change Permissions</a>
                 <a class="btn small" href="${reverse_with_get('filebrowser.views.move',get=dict(src_path=path,mode=stringformat(file['stats']['mode'], "o"),next=current_request_path))}">Move</a>
 
 
@@ -244,7 +244,9 @@ from desktop.lib.django_util import reverse_with_get
 <div id="change-owner-modal" class="modal hide fade">
 
 </div>
+<div id="change-permission-modal" class="modal hide fade">
 
+</div>
 
 <script type="text/javascript" charset="utf-8">
     // ajax modal windows
@@ -266,6 +268,23 @@ from desktop.lib.django_util import reverse_with_get
         });
     }
 
+    function openChmodWindow(path, mode, next){
+        //alert('openChownWindow: ' + path + ',' + user + ',' + group + ',' + next)
+        ///filebrowser/chown/
+
+        $.ajax({
+            url: '/filebrowser/chmod',
+            data: {'path':path, 'mode':mode, 'next' : next},
+            beforeSend: function(xhr){
+                xhr.setRequestHeader("X-Requested-With", "Hue");
+            },
+            dataType: 'html',
+            success: function(data){
+                $('#change-permission-modal').html(data);
+                $('#change-permission-modal').modal('show');
+            }
+        });
+    }
 
     //uploader
     var num_of_pending_uploads = 0;
