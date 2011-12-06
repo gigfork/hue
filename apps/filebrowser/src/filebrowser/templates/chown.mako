@@ -55,43 +55,40 @@
       % endif
     % endif
 </%def>
-  <form action="/filebrowser/chown?next=${next|u}" method="POST" enctype="multipart/form-data" class="form-stacked">
- <div class="modal-header">
+<form action="/filebrowser/chown?next=${next|u}" method="POST" enctype="multipart/form-data" class="form-stacked form-padding-fix">
+    <div class="modal-header">
         <a href="#" class="close">&times;</a>
         <h3>Change Owner / Group: ${path}</h3>
     </div>
+    <div class="change-owner-modal-body clearfix" >
+        <div class="alert-message block-message info">Note: Only the Hadoop superuser, on this FS "${extra_params['superuser']}", may change the owner of a file.</div>
+        <div style="padding-left: 15px; padding-bottom: 10px;">
+            ${edit.render_field(form["path"], hidden=True)}
+
+            <label>User</label>
+
+            % if is_superuser:
+            ${ selection("user", form.all_users, extract_field_data(form["user"]), "user_other") }
+            % else:
+            ${ selection("user", [extract_field_data(form['user'])], extract_field_data(form["user"])) }
+            % endif
+
+            <label>Group</label>
+
+            % if is_superuser:
+            ${ selection("group", form.all_groups, extract_field_data(form["group"]), "group_other") }
+            % else:
+            ${ selection("group", [group for group in form.all_groups if group in extra_params['current_user'].get_groups()], extract_field_data(form["group"])) }
+            % endif
+        </div>
 
 
-
-    
-
-  <div class="change-owner-modal-body">
-
-    ${edit.render_field(form["path"], hidden=True)}
-
-    <label>User</label>
-
-      % if is_superuser:
-        ${ selection("user", form.all_users, extract_field_data(form["user"]), "user_other") }
-      % else:
-        ${ selection("user", [extract_field_data(form['user'])], extract_field_data(form["user"])) }
-      % endif
-
-    <label>Group</label>
-
-      % if is_superuser:
-        ${ selection("group", form.all_groups, extract_field_data(form["group"]), "group_other") }
-      % else:
-        ${ selection("group", [group for group in form.all_groups if group in extra_params['current_user'].get_groups()], extract_field_data(form["group"])) }
-      % endif
-
-
-  </div>
-      <div class="modal-footer" style="padding-top: 10px;">
-        <input class="btn primary" type="submit" value="Submit" />
-        <a class="btn" href="${next|u}">Cancel</a>
     </div>
-  </form>
+    <div class="modal-footer" style="padding-top: 10px;">
+        <input class="btn primary" type="submit" value="Submit" />
+        <a class="btn" onclick="$('#change-owner-modal').modal('hide');">Cancel</a>
+    </div>
+</form>
 
 
 <!--<div class="alert-message info modal-footer">Note: Only the Hadoop superuser, on this FS "${extra_params['superuser']}", may change the owner of a file.</div>-->
