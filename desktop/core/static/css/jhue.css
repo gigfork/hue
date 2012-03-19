@@ -108,6 +108,20 @@
     text-decoration: none;
 }
 
+.navbar .pull-right {
+	color:#e5e5e5;
+}
+
+.navbar .pull-right a {
+	font-weight:bold;
+    color:#e5e5e5;
+}
+
+.navbar .pull-right a:hover {
+    color:#ffffff;
+}
+
+
 
 /*
 .topbar-inner, .topbar {
@@ -265,20 +279,6 @@
 .hidden {
 	display:none;
 }
-
-.pull-right {
-	color:#e5e5e5;
-}
-
-.pull-right a {
-	font-weight:bold;
-    color:#e5e5e5;
-}
-
-.pull-right a:hover {
-    color:#ffffff;
-}
-
 
 code {
 	line-height:1.4em;
