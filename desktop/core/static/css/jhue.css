@@ -311,6 +311,26 @@ h1 {
 	color:#333;
 }
 
+<<<<<<< HEAD
+=======
+.hidden {
+	display:none;
+}
+
+.pull-right {
+	color:#e5e5e5;
+}
+
+.pull-right a {
+	font-weight:bold;
+    color:#e5e5e5;
+}
+
+.pull-right a:hover {
+    color:#ffffff;
+}
+>>>>>>> HUE-636 Initial port to Bootstrap 2
+
 
 code {
 	line-height:1.4em;
