@@ -125,6 +125,10 @@ h1 {
     margin-bottom:.7em;
 }
 
+.form-stacked {
+    margin: 0;
+}
+
 
 /*
 .topbar-inner, .topbar {

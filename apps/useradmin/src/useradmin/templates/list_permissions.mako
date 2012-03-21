@@ -102,7 +102,7 @@ ${layout.menubar(section='permissions')}
 		    $("#clearFilterBtn").click(function(){
 		        $("#filterInput").val("");
 		        $.each($(".permissionRow"), function(index, value) {
-		            $(value).show(250);
+		            $(value).show();
 		        });
 		    });
 

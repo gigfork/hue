@@ -156,7 +156,7 @@ ${layout.menubar(section='tables')}
         ))}
     	<div class="input">
 		     ${comps.field(load_form["path"], title_klass='loadPath', attrs=dict(
-		       klass='loadPath span8'
+		       klass='loadPath input-xlarge'
 		       ))}
 		</div>
 		</div>
@@ -166,7 +166,7 @@ ${layout.menubar(section='tables')}
 			${comps.label(load_form[pf], render_default=True)}
 	    	<div class="input">
 	        	${comps.field(load_form[pf], render_default=True, attrs=dict(
-			       klass='span8'
+			       klass='input-xlarge'
 			       ))}
 			</div>
 		</div>
@@ -195,6 +195,7 @@ ${layout.menubar(section='tables')}
 		display:none;
 		min-height:100px;
 		overflow-y:scroll;
+		margin-top:10px;
 	}
 </style>
 
@@ -205,7 +206,8 @@ ${layout.menubar(section='tables')}
 			onFileChoose: function(filePath){
 				$(".loadPath").val(filePath);
 				$("#filechooser").slideUp();
-			}
+			},
+			createFolder: false
 		});
 		$(".datatables").dataTable({
 			"bPaginate": false,
