@@ -59,7 +59,6 @@ ${layout.menubar(section='hive configuration')}
 		$("#filterInput").keyup(function(){
 			window.clearTimeout(searchTimeoutId);
 			searchTimeoutId = window.setTimeout(function(){
-				console.log("Search");
 				$.each($(".confRow"), function(index, value) {
 		          if($(value).data("search").toLowerCase().indexOf($("#filterInput").val().toLowerCase()) == -1 && $("#filterInput").val() != ""){
 		            $(value).hide();

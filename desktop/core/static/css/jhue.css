@@ -129,6 +129,10 @@ h1 {
     margin: 0;
 }
 
+.pagination p {
+    padding-top:6px;
+}
+
 
 /*
 .topbar-inner, .topbar {
@@ -156,6 +160,30 @@ h1 {
     border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
     color: #FFFFFF;
     text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
+}
+
+.btn.primary, .btn-primary {
+  background-color: #006dcc;
+  color: #ffffff;
+  background-image: -moz-linear-gradient(top, #2c7fb3, #01639c);
+  background-image: -ms-linear-gradient(top, #2c7fb3, #01639c);
+  background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#2c7fb3), to(#01639c));
+  background-image: -webkit-linear-gradient(top, #2c7fb3, #01639c);
+  background-image: -o-linear-gradient(top, #2c7fb3, #01639c);
+  background-image: linear-gradient(top, #2c7fb3, #01639c);
+  background-repeat: repeat-x;
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#'2c7fb3, endColorstr='#'01639c, GradientType=0);
+  border-color: #0044cc #0044cc #002a80;
+  border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
+  filter: progid:DXImageTransform.Microsoft.gradient(enabled = false);
+}
+.btn.primary:hover,
+.btn-primary:hover,
+.btn-primary:active,
+.btn-primary.active,
+.btn-primary.disabled,
+.btn-primary[disabled] {
+  background-color: #01639c;
 }
 
 .withTitle {
