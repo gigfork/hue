@@ -180,7 +180,6 @@
 </%def>
 <%def name="pagination(page)">
 	<div class="pagination">
-
 	  <ul class="pull-right">
 	    <li class="prev"><a title="Beginning of List" ${toppage(page)} class="bw-firstBlock">&larr; Beginning of List</a></li>
 	    <li><a title="Previous Page" ${prevpage(page)} class="bw-prevBlock">Previous Page</a></li>
