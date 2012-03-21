@@ -117,7 +117,7 @@ ${layout.menubar(section='query')}
 						${comps.field(f['_deleted'], tag="button", button_text="Remove", notitle=True, attrs=dict(
 							type="submit",
 							title="Delete this setting",
-							klass="btn small danger settingsDelete"
+							klass="btn small btn-danger settingsDelete"
 						), value=True)}
 					</div>
 					${comps.field(f['_exists'], hidden=True)}
@@ -246,8 +246,8 @@ ${layout.menubar(section='query')}
 	        % endif
 
 	        % if error_messages or log:
-				<ul class="tabs">
-					<li class="active"><a href="#queryPane">Query</a></li>
+				<ul class="nav nav-tabs">
+					<li class="active"><a href="#queryPane" data-toggle="tab">Query</a></li>
 					% if error_message or log:
 	              	<li><a href="#errorPane">
 						% if log:
@@ -285,7 +285,7 @@ ${layout.menubar(section='query')}
 
 <div id="chooseFile" class="modal hide fade">
 	<div class="modal-header">
-		<a href="#" class="close">&times;</a>
+		<a href="#" class="close" data-dismiss="modal">&times;</a>
 		<h3>Choose a file</h3>
 	</div>
 	<div class="modal-body">
@@ -306,7 +306,6 @@ ${layout.menubar(section='query')}
 
 <script type="text/javascript" charset="utf-8">
 	$(document).ready(function(){
-		$(".tabs").tabs();
 		$("*[rel=popover]").popover({
 			offset: 10
 		});
@@ -340,7 +339,8 @@ ${layout.menubar(section='query')}
 				onFileChoose: function(filePath){
 					$("input[name='"+_destination+"']").val(filePath);
 					$("#chooseFile").modal("hide");
-				}
+				},
+				createFolder: false
 			});
 			$("#chooseFile").modal("show");
 		});
@@ -379,10 +379,7 @@ ${layout.menubar(section='query')}
 			$("#advancedSettingsForm").submit();
 		}
 
-		$("#chooseFile").modal({
-			keyboard: true,
-			backdrop: true
-		})
+
 	});
 </script>
 
