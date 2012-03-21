@@ -30,16 +30,19 @@ ${layout.menubar(section='designs')}
 
 <div class="container-fluid">
     <h1>Job Designs</h1>
-    <div class="well">
-        Filter: <input id="filterInput"/>
-        <p class="pull-right">
-            <a href="${ url('jobsub.views.new_design', action_type='mapreduce') }" class="btn">Create Mapreduce Design</a>
+	<div class="well">
+		<p class="pull-right">
+			<a href="${ url('jobsub.views.new_design', action_type='mapreduce') }" class="btn">Create Mapreduce Design</a>
             <a href="${ url('jobsub.views.new_design', action_type='streaming') }" class="btn">Create Streaming Design</a>
             <a href="${ url('jobsub.views.new_design', action_type='java') }" class="btn">Create Java Design</a>
-        </p>
-    </div>
+		</p>
+		<form class="form-search">
+			Filter: <input id="filterInput" class="input-xlarge search-query" placeholder="Search for username, name, etc...">
+		    <a href="#" id="clearFilterBtn" class="btn">Clear</a>
+		</form>
+	</div>
 
-    <table id="designTable" class="datatables">
+    <table id="designTable" class="table table-condensed datatables">
         <thead>
             <tr>
                 <th>Owner</th>
@@ -87,7 +90,7 @@ ${layout.menubar(section='designs')}
 <div id="submitWf" class="modal hide fade">
 	<form id="submitWfForm" action="" method="POST">
         <div class="modal-header">
-            <a href="#" class="close">&times;</a>
+            <a href="#" class="close" data-dismiss="modal">&times;</a>
             <h3 id="submitWfMessage">Submit this design?</h3>
         </div>
         <div class="modal-body">
@@ -106,7 +109,7 @@ ${layout.menubar(section='designs')}
 <div id="deleteWf" class="modal hide fade">
 	<form id="deleteWfForm" action="" method="POST">
         <div class="modal-header">
-            <a href="#" class="close">&times;</a>
+            <a href="#" class="close" data-dismiss="modal">&times;</a>
             <h3 id="deleteWfMessage">Delete this design?</h3>
         </div>
         <div class="modal-footer">
@@ -118,10 +121,6 @@ ${layout.menubar(section='designs')}
 
 <script type="text/javascript" charset="utf-8">
     $(document).ready(function() {
-        $(".modal").modal({
-            backdrop: "static",
-            keyboard: true
-        });
 
         $(".deleteConfirmation").click(function(){
             var _this = $(this);
@@ -168,7 +167,7 @@ ${layout.menubar(section='designs')}
         $("#submitWf .hideModal").click(function(){
             $("#submitWf").modal("hide");
         });
-        
+
         var oTable = $('#designTable').dataTable( {
           "sPaginationType": "bootstrap",
           "bLengthChange": false,
@@ -178,6 +177,11 @@ ${layout.menubar(section='designs')}
         $("#filterInput").keyup(function() {
             oTable.fnFilter($(this).val());
         });
+		$("#clearFilterBtn").click(function(){
+	        $("#filterInput").val("");
+	        oTable.fnFilter("");
+	    });
+
     });
 </script>
 ${commonfooter()}

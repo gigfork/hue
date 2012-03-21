@@ -121,6 +121,9 @@
     color:#ffffff;
 }
 
+h1 {
+    margin-bottom:.7em;
+}
 
 
 /*
@@ -276,9 +279,6 @@
 	color:#333;
 }
 
-.hidden {
-	display:none;
-}
 
 code {
 	line-height:1.4em;
@@ -455,56 +455,6 @@ table.display td.center {
 .sorting_desc_disabled {
 	background: url('../art/datatables/sort_desc_disabled.png') no-repeat center right;
 }
-
-
-
-
-
-/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
- * DataTables row classes
- */
-table.display tr.odd.gradeA {
-	background-color: #ddffdd;
-}
-
-table.display tr.even.gradeA {
-	background-color: #eeffee;
-}
-
-table.display tr.odd.gradeC {
-	background-color: #ddddff;
-}
-
-table.display tr.even.gradeC {
-	background-color: #eeeeff;
-}
-
-table.display tr.odd.gradeX {
-	background-color: #ffdddd;
-}
-
-table.display tr.even.gradeX {
-	background-color: #ffeeee;
-}
-
-table.display tr.odd.gradeU {
-	background-color: #ddd;
-}
-
-table.display tr.even.gradeU {
-	background-color: #eee;
-}
-
-
-tr.odd {
-	background-color: #E8F1F7;
-}
-
-tr.even {
-	background-color: white;
-}
-
-
 
 
 

@@ -35,7 +35,7 @@ ${commonheader("Job Browser", "jobbrowser")}
 <div class="well">
 	<form action="/jobbrowser/jobs" method="GET">
 		<b>Filter jobs:</b>
-		
+
 				<select name="state" class="submitter">
 					<option value="all" ${get_state('all', state_filter)}>All States</option>
 					<option value="running" ${get_state('running', state_filter)}>Running</option>
@@ -43,11 +43,11 @@ ${commonheader("Job Browser", "jobbrowser")}
 					<option value="failed" ${get_state('failed', state_filter)}>Failed</option>
 					<option value="killed" ${get_state('killed', state_filter)}>Killed</option>
 				</select>
-		
+
 				<input type="text" name="user" title="User Name Filter" value="${user_filter}" placeholder="User Name Filter" class="submitter"/>
-			
+
 				<input type="text" name="text" title="Text Filter" value="${text_filter}" placeholder="Text Filter" class="submitter"/>
-			
+
 	</form>
 </div>
 
@@ -109,7 +109,7 @@ ${commonheader("Job Browser", "jobbrowser")}
 	<h1>Welcome to the Job Browser</h1>
 	<div>
 		<p>There aren't any jobs running. Let's fix that.</p>
-		<a href="/jobsub/list/">Launch the Job Designer</a>
+		<a href="${url('jobsub.views.list_designs')}">Launch the Job Designer</a>
 		% if "beeswax" in appmanager.DESKTOP_APPS:
 		or <a href="/beeswax/">Launch Beeswax</a>
 		% endif
