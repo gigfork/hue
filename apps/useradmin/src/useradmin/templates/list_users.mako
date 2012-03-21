@@ -111,7 +111,7 @@ ${layout.menubar(section='users')}
 		</div>
 		<div class="modal-footer">
 			<input type="submit" class="btn primary" value="Yes"/>
-			<a href="#" class="btn secondary hideModal">No</a>
+			<a href="#" class="btn secondary" data-dismiss="modal">No</a>
 		</div>
 		</form>
 	</div>
@@ -137,9 +137,6 @@ ${layout.menubar(section='users')}
 					$("#deleteUserMessage").text(_this.attr("alt"));
 				});
 				$("#deleteUser").modal("show");
-			});
-			$(".hideModal").click(function(){
-				$("#deleteUser").modal("hide");
 			});
 
 			$("#filterInput").keyup(function(){

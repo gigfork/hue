@@ -31,11 +31,13 @@ ${layout.menubar(section='designs')}
 <div class="container-fluid">
     <h1>Job Designs</h1>
 	<div class="well">
-		<p class="pull-right">
-			<a href="${ url('jobsub.views.new_design', action_type='mapreduce') }" class="btn">Create Mapreduce Design</a>
-            <a href="${ url('jobsub.views.new_design', action_type='streaming') }" class="btn">Create Streaming Design</a>
-            <a href="${ url('jobsub.views.new_design', action_type='java') }" class="btn">Create Java Design</a>
-		</p>
+
+			<div class="btn-group pull-right">
+				<a id="createMapreduceBtn" href="#" class="btn">Create Mapreduce Design</a>
+            	<a id="createStreamingBtn" href="#" class="btn">Create Streaming Design</a>
+            	<a id="createJavaBtn" href="#" class="btn">Create Java Design</a>
+			</div>
+
 		<form class="form-search">
 			Filter: <input id="filterInput" class="input-xlarge search-query" placeholder="Search for username, name, etc...">
 		    <a href="#" id="clearFilterBtn" class="btn">Clear</a>
@@ -119,6 +121,19 @@ ${layout.menubar(section='designs')}
 	</form>
 </div>
 
+<div id="createDesign" class="modal hide fade userModal">
+	<div class="modal-header">
+		<a href="#" class="close" data-dismiss="modal">&times;</a>
+		<h3>Create design (<span id="createDesignType"></span> type)</h3>
+	</div>
+	<div id="addUserBody" class="modal-body">
+		<iframe id="createDesignFrame" class="scroll" frameBorder="0"></iframe>
+	</div>
+	<div class="modal-footer">
+		<button id="createDesignSaveBtn" class="btn primary">Save</button>
+	</div>
+</div>
+
 <script type="text/javascript" charset="utf-8">
     $(document).ready(function() {
 
@@ -181,6 +196,29 @@ ${layout.menubar(section='designs')}
 	        $("#filterInput").val("");
 	        oTable.fnFilter("");
 	    });
+
+		function showCreateDesignModal(type, url){
+			$("#createDesignFrame").attr("src", "");
+			$("#createDesignType").text(type);
+			$("#createDesignFrame").css("height","300px").attr("src", url);
+			$("#createDesign").modal("show");
+		}
+
+		$("#createMapreduceBtn").click(function(){
+			showCreateDesignModal("Mapreduce", "${ url('jobsub.views.new_design', action_type='mapreduce') }");
+		});
+
+		$("#createStreamingBtn").click(function(){
+			showCreateDesignModal("Streaming", "${ url('jobsub.views.new_design', action_type='streaming') }");
+		});
+
+		$("#createJavaBtn").click(function(){
+			showCreateDesignModal("Java", "${ url('jobsub.views.new_design', action_type='java') }");
+		});
+
+		$("#createDesignSaveBtn").click(function(){
+			$("#createDesignFrame").contents().find('form').submit();
+		});
 
     });
 </script>
