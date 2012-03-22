@@ -33,16 +33,19 @@ public class Query implements TBase<Query, Query._Fields>, java.io.Serializable,
   private static final TField QUERY_FIELD_DESC = new TField("query", TType.STRING, (short)1);
   private static final TField CONFIGURATION_FIELD_DESC = new TField("configuration", TType.LIST, (short)3);
   private static final TField HADOOP_USER_FIELD_DESC = new TField("hadoop_user", TType.STRING, (short)4);
+  private static final TField DATABASE_FIELD_DESC = new TField("database", TType.STRING, (short)5);
 
   public String query;
   public List<String> configuration;
   public String hadoop_user;
+  public String database;
 
   /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
   public enum _Fields implements TFieldIdEnum {
     QUERY((short)1, "query"),
     CONFIGURATION((short)3, "configuration"),
-    HADOOP_USER((short)4, "hadoop_user");
+    HADOOP_USER((short)4, "hadoop_user"),
+    DATABASE((short)5, "database");
 
     private static final Map<String, _Fields> byName = new HashMap<String, _Fields>();
 
@@ -63,6 +66,8 @@ public class Query implements TBase<Query, Query._Fields>, java.io.Serializable,
           return CONFIGURATION;
         case 4: // HADOOP_USER
           return HADOOP_USER;
+        case 5: // DATABASE
+          return DATABASE;
         default:
           return null;
       }
@@ -114,6 +119,8 @@ public class Query implements TBase<Query, Query._Fields>, java.io.Serializable,
             new FieldValueMetaData(TType.STRING))));
     tmpMap.put(_Fields.HADOOP_USER, new FieldMetaData("hadoop_user", TFieldRequirementType.DEFAULT, 
         new FieldValueMetaData(TType.STRING)));
+    tmpMap.put(_Fields.DATABASE, new FieldMetaData("database", TFieldRequirementType.DEFAULT, 
+        new FieldValueMetaData(TType.STRING)));
     metaDataMap = Collections.unmodifiableMap(tmpMap);
     FieldMetaData.addStructMetaDataMap(Query.class, metaDataMap);
   }
@@ -124,12 +131,14 @@ public class Query implements TBase<Query, Query._Fields>, java.io.Serializable,
   public Query(
     String query,
     List<String> configuration,
-    String hadoop_user)
+    String hadoop_user,
+    String database)
   {
     this();
     this.query = query;
     this.configuration = configuration;
     this.hadoop_user = hadoop_user;
+    this.database = database;
   }
 
   /**
@@ -149,6 +158,9 @@ public class Query implements TBase<Query, Query._Fields>, java.io.Serializable,
     if (other.isSetHadoop_user()) {
       this.hadoop_user = other.hadoop_user;
     }
+    if (other.isSetDatabase()) {
+      this.database = other.database;
+    }
   }
 
   public Query deepCopy() {
@@ -160,6 +172,7 @@ public class Query implements TBase<Query, Query._Fields>, java.io.Serializable,
     this.query = null;
     this.configuration = null;
     this.hadoop_user = null;
+    this.database = null;
   }
 
   public String getQuery() {
@@ -249,6 +262,30 @@ public class Query implements TBase<Query, Query._Fields>, java.io.Serializable,
     }
   }
 
+  public String getDatabase() {
+    return this.database;
+  }
+
+  public Query setDatabase(String database) {
+    this.database = database;
+    return this;
+  }
+
+  public void unsetDatabase() {
+    this.database = null;
+  }
+
+  /** Returns true if field database is set (has been asigned a value) and false otherwise */
+  public boolean isSetDatabase() {
+    return this.database != null;
+  }
+
+  public void setDatabaseIsSet(boolean value) {
+    if (!value) {
+      this.database = null;
+    }
+  }
+
   public void setFieldValue(_Fields field, Object value) {
     switch (field) {
     case QUERY:
@@ -275,6 +312,14 @@ public class Query implements TBase<Query, Query._Fields>, java.io.Serializable,
       }
       break;
 
+    case DATABASE:
+      if (value == null) {
+        unsetDatabase();
+      } else {
+        setDatabase((String)value);
+      }
+      break;
+
     }
   }
 
@@ -288,6 +333,9 @@ public class Query implements TBase<Query, Query._Fields>, java.io.Serializable,
 
     case HADOOP_USER:
       return getHadoop_user();
+
+    case DATABASE:
+      return getDatabase();
 
     }
     throw new IllegalStateException();
@@ -306,6 +354,8 @@ public class Query implements TBase<Query, Query._Fields>, java.io.Serializable,
       return isSetConfiguration();
     case HADOOP_USER:
       return isSetHadoop_user();
+    case DATABASE:
+      return isSetDatabase();
     }
     throw new IllegalStateException();
   }
@@ -350,6 +400,15 @@ public class Query implements TBase<Query, Query._Fields>, java.io.Serializable,
         return false;
     }
 
+    boolean this_present_database = true && this.isSetDatabase();
+    boolean that_present_database = true && that.isSetDatabase();
+    if (this_present_database || that_present_database) {
+      if (!(this_present_database && that_present_database))
+        return false;
+      if (!this.database.equals(that.database))
+        return false;
+    }
+
     return true;
   }
 
@@ -371,6 +430,11 @@ public class Query implements TBase<Query, Query._Fields>, java.io.Serializable,
     builder.append(present_hadoop_user);
     if (present_hadoop_user)
       builder.append(hadoop_user);
+
+    boolean present_database = true && (isSetDatabase());
+    builder.append(present_database);
+    if (present_database)
+      builder.append(database);
 
     return builder.toHashCode();
   }
@@ -409,6 +473,16 @@ public class Query implements TBase<Query, Query._Fields>, java.io.Serializable,
     }
     if (isSetHadoop_user()) {
       lastComparison = TBaseHelper.compareTo(this.hadoop_user, typedOther.hadoop_user);
+      if (lastComparison != 0) {
+        return lastComparison;
+      }
+    }
+    lastComparison = Boolean.valueOf(isSetDatabase()).compareTo(typedOther.isSetDatabase());
+    if (lastComparison != 0) {
+      return lastComparison;
+    }
+    if (isSetDatabase()) {
+      lastComparison = TBaseHelper.compareTo(this.database, typedOther.database);
       if (lastComparison != 0) {
         return lastComparison;
       }
@@ -461,6 +535,13 @@ public class Query implements TBase<Query, Query._Fields>, java.io.Serializable,
             TProtocolUtil.skip(iprot, field.type);
           }
           break;
+        case 5: // DATABASE
+          if (field.type == TType.STRING) {
+            this.database = iprot.readString();
+          } else { 
+            TProtocolUtil.skip(iprot, field.type);
+          }
+          break;
         default:
           TProtocolUtil.skip(iprot, field.type);
       }
@@ -498,6 +579,11 @@ public class Query implements TBase<Query, Query._Fields>, java.io.Serializable,
       oprot.writeString(this.hadoop_user);
       oprot.writeFieldEnd();
     }
+    if (this.database != null) {
+      oprot.writeFieldBegin(DATABASE_FIELD_DESC);
+      oprot.writeString(this.database);
+      oprot.writeFieldEnd();
+    }
     oprot.writeFieldStop();
     oprot.writeStructEnd();
   }
@@ -528,6 +614,14 @@ public class Query implements TBase<Query, Query._Fields>, java.io.Serializable,
       sb.append("null");
     } else {
       sb.append(this.hadoop_user);
+    }
+    first = false;
+    if (!first) sb.append(", ");
+    sb.append("database:");
+    if (this.database == null) {
+      sb.append("null");
+    } else {
+      sb.append(this.database);
     }
     first = false;
     sb.append(")");

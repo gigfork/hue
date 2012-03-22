@@ -49,6 +49,7 @@ class Query(object):
    - query
    - configuration
    - hadoop_user
+   - database
   """
 
   thrift_spec = (
@@ -57,12 +58,14 @@ class Query(object):
     None, # 2
     (3, TType.LIST, 'configuration', (TType.STRING,None), None, ), # 3
     (4, TType.STRING, 'hadoop_user', None, None, ), # 4
+    (5, TType.STRING, 'database', None, None, ), # 5
   )
 
-  def __init__(self, query=None, configuration=None, hadoop_user=None,):
+  def __init__(self, query=None, configuration=None, hadoop_user=None, database=None,):
     self.query = query
     self.configuration = configuration
     self.hadoop_user = hadoop_user
+    self.database = database
 
   def read(self, iprot):
     if iprot.__class__ == TBinaryProtocol.TBinaryProtocolAccelerated and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None and fastbinary is not None:
@@ -93,6 +96,11 @@ class Query(object):
           self.hadoop_user = iprot.readString();
         else:
           iprot.skip(ftype)
+      elif fid == 5:
+        if ftype == TType.STRING:
+          self.database = iprot.readString();
+        else:
+          iprot.skip(ftype)
       else:
         iprot.skip(ftype)
       iprot.readFieldEnd()
@@ -117,6 +125,10 @@ class Query(object):
     if self.hadoop_user != None:
       oprot.writeFieldBegin('hadoop_user', TType.STRING, 4)
       oprot.writeString(self.hadoop_user)
+      oprot.writeFieldEnd()
+    if self.database != None:
+      oprot.writeFieldBegin('database', TType.STRING, 5)
+      oprot.writeString(self.database)
       oprot.writeFieldEnd()
     oprot.writeFieldStop()
     oprot.writeStructEnd()
