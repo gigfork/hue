@@ -814,16 +814,17 @@ div.box {
 }
 
 .jHueSelector label {
-	width:10px;
 	float: none;
 	padding-left:4px;
 }
 .jHueSelector label input[type=checkbox] {
 	margin-right:3px;
+    display: inline;
 }
 
 .jHueSelectorHeader input[type=text] {
-	float:right;
+	position:absolute;
+    margin-left:180px;
 	width:100px;
 	height:11px;
 }
