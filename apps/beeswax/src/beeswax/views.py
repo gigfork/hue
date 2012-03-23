@@ -1084,8 +1084,8 @@ def install_examples(request):
     try:
       beeswax.management.commands.beeswax_install_examples.Command().handle_noargs()
       if models.MetaInstall.get().installed_example:
-		creation_succeeded = True
-		return HttpResponse(simplejson.dumps(creation_succeeded), mimetype="application/json")
+        creation_succeeded = True
+        return HttpResponse(simplejson.dumps(creation_succeeded), mimetype="application/json")
     except Exception, err:
       LOG.exception(err)
 
