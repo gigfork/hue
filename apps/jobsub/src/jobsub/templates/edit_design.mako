@@ -244,7 +244,6 @@ ${commonheader_iframe()}
         };
 
         var ViewModel = function(properties, files, archives) {
-			console.log(properties);
             var self = this;
 
             self.properties = ko.observableArray(properties);
