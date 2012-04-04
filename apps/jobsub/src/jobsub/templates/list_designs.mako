@@ -33,9 +33,12 @@ ${layout.menubar(section='designs')}
 	<div class="well">
 
 			<div class="btn-group pull-right">
-				<a id="createMapreduceBtn" href="#" class="btn">Create Mapreduce Design</a>
-            	<a id="createStreamingBtn" href="#" class="btn">Create Streaming Design</a>
-            	<a id="createJavaBtn" href="#" class="btn">Create Java Design</a>
+				<a href="${ url('jobsub.views.new_design', action_type='mapreduce') }" class="btn">Create Mapreduce Design</a>
+            	<a href="${ url('jobsub.views.new_design', action_type='streaming') }" class="btn">Create Streaming Design</a>
+            	<a href="${ url('jobsub.views.new_design', action_type='java') }" class="btn">Create Java Design</a>
+				%if show_install_examples:
+					<a id="installSamplesLink" href="javascript:void(0)" data-confirmation-url="${url('jobsub.views.setup')}" class="btn" >Install Samples</a>
+				%endif
 			</div>
 
 		<form class="form-search">
@@ -63,7 +66,7 @@ ${layout.menubar(section='designs')}
                     <td>${design.root_action.action_type}</td>
                     <td>${design.description}</td>
                     <td nowrap="nowrap">${design.last_modified.strftime('%c')}</td>
-                    <td nowrap="nowrap" class="pull-right">
+                    <td nowrap="nowrap" class="right">
                       %if currentuser.is_superuser:
                         %if currentuser.username == design.owner.username:
                           <a title="Edit ${design.name}" class="btn small"
@@ -121,18 +124,19 @@ ${layout.menubar(section='designs')}
 	</form>
 </div>
 
-<div id="createDesign" class="modal hide fade userModal">
-	<div class="modal-header">
-		<a href="#" class="close" data-dismiss="modal">&times;</a>
-		<h3>Create design (<span id="createDesignType"></span> type)</h3>
-	</div>
-	<div id="addUserBody" class="modal-body">
-		<iframe id="createDesignFrame" class="scroll" frameBorder="0"></iframe>
-	</div>
-	<div class="modal-footer">
-		<button id="createDesignSaveBtn" class="btn primary">Save</button>
-	</div>
+<div id="installSamples" class="modal hide fade">
+	<form id="installSamplesForm" action="${url('jobsub.views.setup')}" method="POST">
+        <div class="modal-header">
+            <a href="#" class="close" data-dismiss="modal">&times;</a>
+            <h3>Install sample job designs?</h3>
+        </div>
+        <div class="modal-footer">
+            <input type="submit" class="btn primary" value="Yes"/>
+            <a href="#" class="btn secondary" data-dismiss="modal">No</a>
+        </div>
+	</form>
 </div>
+
 
 <script type="text/javascript" charset="utf-8">
     $(document).ready(function() {
@@ -197,28 +201,10 @@ ${layout.menubar(section='designs')}
 	        oTable.fnFilter("");
 	    });
 
-		function showCreateDesignModal(type, url){
-			$("#createDesignFrame").attr("src", "");
-			$("#createDesignType").text(type);
-			$("#createDesignFrame").css("height","300px").attr("src", url);
-			$("#createDesign").modal("show");
-		}
+		$("#installSamplesLink").click(function(){
+            $("#installSamples").modal("show");
+        });
 
-		$("#createMapreduceBtn").click(function(){
-			showCreateDesignModal("Mapreduce", "${ url('jobsub.views.new_design', action_type='mapreduce') }");
-		});
-
-		$("#createStreamingBtn").click(function(){
-			showCreateDesignModal("Streaming", "${ url('jobsub.views.new_design', action_type='streaming') }");
-		});
-
-		$("#createJavaBtn").click(function(){
-			showCreateDesignModal("Java", "${ url('jobsub.views.new_design', action_type='java') }");
-		});
-
-		$("#createDesignSaveBtn").click(function(){
-			$("#createDesignFrame").contents().find('form').submit();
-		});
 
     });
 </script>

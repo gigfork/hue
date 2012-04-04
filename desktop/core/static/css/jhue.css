@@ -133,6 +133,10 @@ h1 {
     padding-top:6px;
 }
 
+.right {
+    text-align:right!important;
+}
+
 
 /*
 .topbar-inner, .topbar {
@@ -310,26 +314,6 @@ h1 {
 .menubar-inner a.disabled:hover {
 	color:#333;
 }
-
-<<<<<<< HEAD
-=======
-.hidden {
-	display:none;
-}
-
-.pull-right {
-	color:#e5e5e5;
-}
-
-.pull-right a {
-	font-weight:bold;
-    color:#e5e5e5;
-}
-
-.pull-right a:hover {
-    color:#ffffff;
-}
->>>>>>> HUE-636 Initial port to Bootstrap 2
 
 
 code {

@@ -38,6 +38,7 @@ from desktop.lib.django_util import render, PopupException, extract_field_data
 from desktop.log.access import access_warn
 
 from jobsub import models, submit
+from jobsub.management.commands import jobsub_setup
 from jobsub.oozie_lib.oozie_api import get_oozie
 import jobsub.forms
 
@@ -135,12 +136,15 @@ def list_designs(request):
   if name:
     data = data.filter(name__icontains=name)
   data = data.order_by('-last_modified')
+  show_install_examples = \
+      request.user.is_superuser and not jobsub_setup.Command().has_been_setup()
 
   return render("list_designs.mako", request, {
     'designs': list(data),
     'currentuser':request.user,
     'owner': owner,
     'name': name,
+    'show_install_examples': show_install_examples,
   })
 
 
@@ -247,6 +251,14 @@ def submit_design(request, design_id):
   return redirect(urlresolvers.reverse(oozie_job, kwargs={'jobid': jobid}))
 
 
+def setup(request):
+  """Installs jobsub examples."""
+  if request.method != "POST":
+    raise PopupException('Please use a POST request to install the examples.')
+  jobsub_setup.Command().handle_noargs()
+  return redirect(urlresolvers.reverse(list_designs))
+
+
 
 # See http://wiki.apache.org/hadoop/JobConfFile
 _STD_PROPERTIES = [
@@ -266,8 +278,11 @@ _STD_PROPERTIES = [
   'mapred.input.value.class',
   'mapred.output.key.class',
   'mapred.output.value.class',
+  'mapred.mapoutput.key.class',
+  'mapred.mapoutput.value.class',
   'mapred.combine.buffer.size',
   'mapred.min.split.size',
+  'mapred.speculative.execution',
   'mapred.map.tasks.speculative.execution',
   'mapred.reduce.tasks.speculative.execution',
   'mapred.queue.default.acl-administer-jobs',

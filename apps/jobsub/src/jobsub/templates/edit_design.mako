@@ -17,15 +17,18 @@
 <%!
   import urllib
 
-  from desktop.views import commonheader_iframe, commonfooter_iframe
+  from desktop.views import commonheader, commonfooter
   from django.utils.translation import ugettext, ungettext, get_language, activate
   from desktop.lib.django_util import extract_field_data
 
   _ = ugettext
 %>
 
+<%namespace name="layout" file="layout.mako" />
 
-${commonheader_iframe()}
+${commonheader("Job Designer", "jobsub", "100px")}
+${layout.menubar(section='designs')}
+
 
 
 <link rel="stylesheet" href="/static/ext/css/jquery-ui-autocomplete-1.8.18.css" type="text/css" media="screen" title="no title" charset="utf-8" />
@@ -150,7 +153,7 @@ ${commonheader_iframe()}
 
     ## Submit
     <div class="actions">
-      <button data-bind="click: submit" class="btn primary hide">Save</button>
+      <button data-bind="click: submit" class="btn primary">Save</button>
     </div>
   </form>
 
@@ -185,22 +188,22 @@ ${commonheader_iframe()}
 	    border: 1px solid rgba(0, 0, 0, 0.3);
 	    border-radius: 6px 6px 6px 6px;
 	    box-shadow: 0 3px 7px rgba(0, 0, 0, 0.3);
-	    width:300px;
+	    width:600px;
 		position:fixed;
 		background-color:#FFFFFF;
 		top:10px;
 		left: 50%;
-		margin: 0 0 0 -150px;
+		margin: 0 0 0 -300px;
 	    z-index: 1050;
 	}
 
     #fileChooserModal {
 		padding:14px;
-        height:170px;
+        height:370px;
     }
 
 	#fileChooserModal ul {
-		height:130px;
+		height:330px;
 		overflow-y:auto;
 	}
 </style>
@@ -349,4 +352,4 @@ ${commonheader_iframe()}
 </script>
 
 
-${commonfooter_iframe()}
+${commonfooter()}
