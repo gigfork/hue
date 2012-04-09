@@ -24,3 +24,4 @@ REQUIRES_HADOOP = True
 DEPENDER_PACKAGE_YMLS = [
     "static/js/package.yml",
 ]
+ICON = "/jobbrowser/static/art/icon_large.png"

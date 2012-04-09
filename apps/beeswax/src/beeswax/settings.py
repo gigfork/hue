@@ -19,3 +19,4 @@ REQUIRES_HADOOP = True
 DEPENDER_PACKAGE_YMLS = [
     "static/js/package.yml",
 ]
+ICON = "/beeswax/static/art/beeswax-logo.png"

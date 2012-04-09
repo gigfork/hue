@@ -19,3 +19,4 @@ REQUIRES_HADOOP = False
 DEPENDER_PACKAGE_YMLS = [
   "src/help/static/js/package.yml",
 ]
+ICON = "/help/static/art/help.png"

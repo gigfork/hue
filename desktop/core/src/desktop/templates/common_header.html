@@ -76,7 +76,7 @@ limitations under the License.
 				<div class="nav-collapse">
 					<ul class="nav">
                         {% for app in apps %}
-                        <li {% is_selected section app.display_name %}><a href="/{{app.display_name}}">{{app.nice_name}}</a></li>
+                        <li {% is_selected section app.display_name %}><a href="/{{app.display_name}}">{%if app.icon_path%}<img width="25" height="25" src="{{app.icon_path}}"/>{%endif%} {{app.nice_name}}</a></li>
                         {% endfor %}
 						<li class="divider-vertical"></li>
 						<li id="checkConfig"><li>
