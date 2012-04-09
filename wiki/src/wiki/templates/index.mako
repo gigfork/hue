@@ -1,6 +1,4 @@
-<%!
-from desktop.views import commonheader, commonfooter
-%>
+<%!from desktop.views import commonheader, commonfooter %>
 
 ${commonheader("Wiki", "wiki", "100px")}
 
@@ -10,7 +8,15 @@ ${commonheader("Wiki", "wiki", "100px")}
 ## and passed along as the "view" argument in its onLoad event
 
 ## the class 'jframe_padded' will give the contents of your window a standard padding
-<div id="index" class="view jframe_padded">
+<div class="subnav subnav-fixed">
+	<div class="container-fluid">
+	<ul class="nav nav-pills">
+		<li></li>
+	</ul>
+	</div>
+</div>
+
+<div class="container-fluid">
   <h2>Wiki app is successfully setup!</h2>
   <p>It's now ${date}.</p>
     % for app in apps:
