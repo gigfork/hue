@@ -13,3 +13,13 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+
+
+from django.db import models
+
+
+
+class WikiPost(models.Model):
+    title = models.CharField(max_length=1024)
+    body = models.TextField()
+    posted_at = models.DateTimeField(auto_now=True)

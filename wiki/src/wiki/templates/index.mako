@@ -9,18 +9,22 @@ ${commonheader("Wiki", "wiki", "100px")}
 
 ## the class 'jframe_padded' will give the contents of your window a standard padding
 <div class="subnav subnav-fixed">
-	<div class="container-fluid">
-	<ul class="nav nav-pills">
-		<li></li>
-	</ul>
-	</div>
+    <div class="container-fluid">
+        <ul class="nav nav-pills">
+            <li></li>
+        </ul>
+    </div>
 </div>
 
 <div class="container-fluid">
-  <h2>Wiki app is successfully setup!</h2>
-  <p>It's now ${date}.</p>
-    % for app in apps:
-    <p>Number of apps: <a href="/${app.display_name}">${app.nice_name}</a></p>
+    <h2>Wiki</h2>
+    % for post in posts:
+    <p>
+        <b>${post.title}</b><br>
+        ${post.body}
+        <br>
+        <i>Posted at ${post.posted_at}</i>
+    </p>
 
     %endfor
 </div>

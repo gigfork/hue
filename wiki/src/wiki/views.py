@@ -20,6 +20,15 @@ import datetime
 
 from desktop import appmanager
 
+from wiki.models import WikiPost
+
 def index(request):
-  appmanager.DESKTOP_APPS
-  return render('index.mako', request, dict(apps=appmanager.DESKTOP_APPS,date=datetime.datetime.now()))
+    if "title" in request.REQUEST:
+        wiki_post = WikiPost(title=request.REQUEST["title"], body=request.REQUEST["body"])
+        wiki_post.save()
+
+    posts = WikiPost.objects.all()
+    return render('index.mako', request, dict(posts=posts,apps=appmanager.DESKTOP_APPS,date=datetime.datetime.now()))
+
+def post_form(request):
+    return render('form.mako', request, dict(apps=appmanager.DESKTOP_APPS,date=datetime.datetime.now()))
