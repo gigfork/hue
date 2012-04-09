@@ -55,8 +55,7 @@
 
 <script type="text/javascript" charset="utf-8">
 	$(".pathChooser").click(function(){
-       
-		var self = this;
+       	var self = this;
 		$("#fileChooserModal").jHueFileChooser({
            onFileChoose: function(filePath) {
                $(self).val(filePath);
