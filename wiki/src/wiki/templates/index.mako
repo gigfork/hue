@@ -1,6 +1,9 @@
-<%!from desktop.views import commonheader, commonfooter %>
+<%!
+from desktop.views import commonheader, commonfooter
+%>
 
 ${commonheader("Wiki", "wiki", "100px")}
+${subnav}
 
 ## use double hashes for a mako template comment
 
@@ -8,13 +11,6 @@ ${commonheader("Wiki", "wiki", "100px")}
 ## and passed along as the "view" argument in its onLoad event
 
 ## the class 'jframe_padded' will give the contents of your window a standard padding
-<div class="subnav subnav-fixed">
-    <div class="container-fluid">
-        <ul class="nav nav-pills">
-            <li></li>
-        </ul>
-    </div>
-</div>
 
 <div class="container-fluid">
     <h2>Wiki</h2>

@@ -15,7 +15,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from desktop.lib.django_util import render
+from desktop.lib.django_util import render, render_to_string
 import datetime
 
 from desktop import appmanager
@@ -28,7 +28,10 @@ def index(request):
         wiki_post.save()
 
     posts = WikiPost.objects.all()
-    return render('index.mako', request, dict(posts=posts,apps=appmanager.DESKTOP_APPS,date=datetime.datetime.now()))
+    return render('index.mako', request, dict(subnav=commonsubnav(),posts=posts,apps=appmanager.DESKTOP_APPS,date=datetime.datetime.now()))
 
 def post_form(request):
-    return render('form.mako', request, dict(apps=appmanager.DESKTOP_APPS,date=datetime.datetime.now()))
+    return render('form.mako', request, dict(subnav=commonsubnav(),apps=appmanager.DESKTOP_APPS,date=datetime.datetime.now()))
+
+def commonsubnav():
+    return render_to_string('subnav.mako', dict())
