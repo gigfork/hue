@@ -26,4 +26,5 @@ setup(
       package_dir = {'': 'src'},
       install_requires = ['setuptools', 'desktop'],
       entry_points = { 'desktop.sdk.application': 'about=about' },
+      menu_index = 8,
 )

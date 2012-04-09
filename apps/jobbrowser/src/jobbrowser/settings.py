@@ -25,3 +25,4 @@ DEPENDER_PACKAGE_YMLS = [
     "static/js/package.yml",
 ]
 ICON = "/jobbrowser/static/art/icon_large.png"
+MENU_INDEX = 2

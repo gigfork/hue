@@ -45,4 +45,5 @@ setup(
       ["src/shell/templates", "src/shell/static"],
       "src/shell/")
   }
+
 )

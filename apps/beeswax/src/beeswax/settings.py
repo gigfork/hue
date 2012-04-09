@@ -20,3 +20,4 @@ DEPENDER_PACKAGE_YMLS = [
     "static/js/package.yml",
 ]
 ICON = "/beeswax/static/art/beeswax-logo.png"
+MENU_INDEX = 1

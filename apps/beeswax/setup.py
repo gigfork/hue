@@ -28,5 +28,6 @@ setup(
       entry_points = {
         'desktop.sdk.application': 'beeswax=beeswax',
         'desktop.supervisor.specs': [ 'beeswax_server = beeswax:SUPERVISOR_SPEC' ],
-      }
+      },
+      menu_index = 1,
 )

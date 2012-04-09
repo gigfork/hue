@@ -19,3 +19,4 @@ REQUIRES_HADOOP = False
 DEPENDER_PACKAGE_YMLS = [
     "src/${app_name}/static/js/package.yml",
 ]
+MENU_INDEX = 9

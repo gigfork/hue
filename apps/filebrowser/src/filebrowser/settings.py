@@ -27,3 +27,4 @@ DEPENDER_PACKAGE_YMLS = [
     "src/filebrowser/static/js/package.yml",
 ]
 ICON = "/filebrowser/static/art/icon.png"
+MENU_INDEX = 4
