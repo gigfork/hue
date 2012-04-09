@@ -23,8 +23,26 @@
     <div class="change-owner-modal-body clearfix" >
         <div style="padding-left: 15px;">
         ${edit.render_field(form["src_path"], hidden=True)}
-        ${edit.render_field(form["dest_path"], notitle=True, klass="xlarge")}
+        ${edit.render_field(form["dest_path"], notitle=True, klass="xlarge pathChooser")}
         </div>
+		<div id="fileChooserModal" class="smallModal well hide">
+			<a href="#" class="close" data-dismiss="modal">&times;</a>
+		</div>
+
+
+		## Modal for file chooser
+		<div id="chooseFile" class="modal hide fade">
+		    <div class="modal-header">
+		        <a href="#" class="close" data-dismiss="modal">&times;</a>
+		        <h3>Choose a file</h3>
+		    </div>
+		    <div class="modal-body">
+		        <div id="fileChooserModalz">
+		        </div>
+		    </div>
+		    <div class="modal-footer">
+		    </div>
+		</div>
     </div>
     <div class="modal-footer">
 		<div id="moveNameRequiredAlert" class="alert-message error hide" style="position: absolute; left: 10;">
@@ -34,3 +52,21 @@
         <a class="btn" onclick="$('#moveModal').modal('hide');">Cancel</a>
     </div>
 </form>
+
+<script type="text/javascript" charset="utf-8">
+	$(".pathChooser").click(function(){
+       
+		var self = this;
+		$("#fileChooserModal").jHueFileChooser({
+           onFileChoose: function(filePath) {
+               $(self).val(filePath);
+               $("#fileChooserModal").hide();
+				$("#fileChooserModalBackdrop").hide();
+           },
+			createFolder: false,
+			uploadFile: false
+       });
+       $("#fileChooserModal").slideDown();
+    });
+
+</script>
