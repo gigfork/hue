@@ -265,6 +265,7 @@ def commonheader(title, section, padding="60px"):
   Returns the rendered common header
   """
   return render_to_string("common_header.html", dict(
+    apps=appmanager.DESKTOP_APPS,
     title=title,
     section=section,
     padding=padding
@@ -281,6 +282,8 @@ def commonheader_iframe():
   Returns the rendered common header for iframes
   """
   return render_to_string("common_header_iframe.html")
+
+
 
 def commonfooter_iframe():
   """
