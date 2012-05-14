@@ -23,6 +23,7 @@
 import errno
 import logging
 import mimetypes
+import operator
 import posixpath
 import stat as stat_module
 import os
@@ -38,6 +39,7 @@ from gzip import GzipFile
 from avro import datafile, io
 
 from desktop.lib import i18n, paginator
+from desktop.lib.conf import coerce_bool
 from desktop.lib.django_util import make_absolute, render, render_json
 from desktop.lib.django_util import PopupException, format_preserving_redirect
 from filebrowser.lib.rwx import filetype, rwx
@@ -338,7 +340,7 @@ def listdir(request, path, chooser):
 
 def listdir_paged(request, path, chooser):
     """
-    An paginated version of listdir.
+    A paginated version of listdir.
     Does not support sorting (yet).
     Does not support chooser (yet).
 
@@ -346,10 +348,12 @@ def listdir_paged(request, path, chooser):
       pagenum           - The page number to show. Defaults to 1.
       pagesize          - How many to show on a page. Defaults to 15.
       sortby=?          - Specify attribute to sort by. Accepts:
-                            (name, atime, mtime, size, user, group)
+                            (path, atime, mtime, size, user, group)
                           Defaults to name.
       descending        - Specify a descending sort order.
-                          Default is ascending.
+                          Default to false.
+      filter=?          - Specify a substring filter to search for in
+                          the 'path', 'user' and 'group' fields.
     """
     if not request.fs.isdir(path):
         raise PopupException("Not a directory: %s" % (path,))
@@ -362,6 +366,18 @@ def listdir_paged(request, path, chooser):
 
     all_stats = request.fs.listdir_stats(path)
 
+    # Sort first
+    sortby = request.GET.get('sortby', None)
+    if sortby is not None:
+      if sortby not in ('path', 'atime', 'mtime', 'user', 'group', 'size'):
+        logger.info("Invalid sort attribute '%s' for listdir." %
+                    (sortby,))
+      else:
+        descending_param = request.GET.get('descending', None)
+        all_stats = sorted(all_stats,
+                           key=operator.attrgetter(sortby),
+                           reverse=coerce_bool(descending_param))
+
     # Include parent dir, unless at filesystem root.
     if Hdfs.normpath(path) != posixpath.sep:
         parent_path = request.fs.join(path, "..")
@@ -370,8 +386,6 @@ def listdir_paged(request, path, chooser):
         # actually '..' for display purposes. Encode it since _massage_stats expects byte strings.
         parent_stat['path'] = parent_path
         all_stats.insert(0, parent_stat)
-
-    # TODO(bc): Sort first
 
     # Do pagination
     page = paginator.Paginator(all_stats, pagesize).page(pagenum)
@@ -384,7 +398,7 @@ def listdir_paged(request, path, chooser):
         'current_request_path': request.path,
         'files': page.object_list,
         'page': page,
-		'pagesize': pagesize,
+        'pagesize': pagesize,
         # The following should probably be deprecated
         'cwd_set': True,
         'file_filter': 'any',

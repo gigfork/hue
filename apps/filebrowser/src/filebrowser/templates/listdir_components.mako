@@ -17,6 +17,7 @@
 import datetime
 import md5
 from django.template.defaultfilters import urlencode, stringformat, filesizeformat, date, time, escape
+from django.core.context_processors import request
 from desktop.lib.django_util import reverse_with_get, extract_field_data
 from django.utils.encoding import smart_str
 %>
@@ -40,10 +41,10 @@ from django.utils.encoding import smart_str
 <%def name="pagination(page)">
 	<div class="pagination">
 	  <ul class="pull-right">
-	    <li class="prev"><a title="Beginning of List" ${toppage(page)}>&larr; Beginning of List</a></li>
-	    <li><a title="Previous Page" ${prevpage(page)}>Previous Page</a></li>
-		<li><a title="Next page" ${nextpage(page)}>Next Page</a></li>
-	    <li class="next"><a title="End of List" ${bottompage(page)}>End of List &rarr;</a></li>
+	    <li class="prev"><a class="paginationLinks" title="Beginning of List" ${toppage(page)}>&larr; Beginning of List</a></li>
+	    <li><a class="paginationLinks" title="Previous Page" ${prevpage(page)}>Previous Page</a></li>
+		<li><a class="paginationLinks" title="Next page" ${nextpage(page)}>Next Page</a></li>
+	    <li class="next"><a class="paginationLinks" title="End of List" ${bottompage(page)}>End of List &rarr;</a></li>
 	  </ul>
 	<p>Show <select id="pagesize" class="input-mini"><option>15</option><option>30</option><option>45</option><option>60</option><option>100</option><option>200</option></select> items per page. Showing ${page.start_index()} to ${page.end_index()} of ${page.total_count()} items, page ${page.number} of ${page.num_pages()}.</p>
 	</div>
@@ -72,9 +73,9 @@ from django.utils.encoding import smart_str
 		<thead>
 			<tr>
 			% if cwd_set:
-				<th class="sortable sorting" data-sort="name">Name</th>
+				<th class="sortable sorting" data-sort="path">Name</th>
 			% else:
-				<th class="sortable sorting" data-sort="name">Path</th>
+				<th class="sortable sorting" data-sort="path">Path</th>
 			% endif
 				<th class="sortable sorting" data-sort="size">Size</th>
 				<th class="sortable sorting" data-sort="user">User</th>
@@ -328,13 +329,19 @@ from django.utils.encoding import smart_str
     // don"t wait for the window to load
     window.onload = createUploader;
 
+	function parseQueryString(qs){
+		var queryString = {};
+		qs.split("?").pop().split("&").forEach(function (prop) {
+			var item = prop.split("=");
+			queryString[item.shift()] = item.shift();
+		});
+		return queryString;
+	}
+
 	function getQueryString(){
 		var queryString = {};
 		if (window.location.href.indexOf("?")>-1){
-			window.location.href.split("?").pop().split("&").forEach(function (prop) {
-				var item = prop.split("=");
-				queryString[item.shift()] = item.shift();
-			});
+			queryString = parseQueryString(window.location.href);
 		}
 		return queryString;
 	}
@@ -351,7 +358,7 @@ from django.utils.encoding import smart_str
 		var qs = getQueryString();
 
 		if (qs["sortby"] == null){
-			qs["sortby"] = "name";
+			qs["sortby"] = "path";
 		}
 
 		var el = $(".sortable[data-sort="+qs["sortby"]+"]");
@@ -371,6 +378,15 @@ from django.utils.encoding import smart_str
 			}
 			else {
 				delete qs["descending"];
+			}
+			location.href = setQueryString(qs);
+		});
+
+		$(".paginationLinks").click(function(e){
+			e.preventDefault();
+			var lqs = parseQueryString($(e.target).attr("href"));
+			for (var key in lqs) {
+				qs[key] = lqs[key];
 			}
 			location.href = setQueryString(qs);
 		});
