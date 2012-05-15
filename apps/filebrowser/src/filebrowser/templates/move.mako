@@ -26,8 +26,7 @@
         ${edit.render_field(form["dest_path"], notitle=True, klass="input-xlarge pathChooser")}
         </div>
 		<br/>
-		<div id="fileChooserModal" class="smallModal well hide">
-			<a href="#" class="close" data-dismiss="modal">&times;</a>
+		<div id="fileChooserMove" class="well hide">
 		</div>
     </div>
     <div class="modal-footer">
@@ -40,18 +39,20 @@
 </form>
 
 <script type="text/javascript" charset="utf-8">
-	$(".pathChooser").click(function(){
-		var self = this;
-		$("#fileChooserModal").jHueFileChooser({
-			onFileChoose: function(filePath) {
-				$(self).val(filePath);
-			},
-			onFolderChange: function(folderPath){
-				$(self).val(folderPath);
-			},
-			createFolder: false,
-			uploadFile: false
+	$(document).ready(function(){
+		$(".pathChooser").click(function(){
+			var self = this;
+			$("#fileChooserMove").jHueFileChooser({
+				onFileChoose: function(filePath) {
+					$(self).val(filePath);
+				},
+				onFolderChange: function(folderPath){
+					$(self).val(folderPath);
+				},
+				createFolder: false,
+				uploadFile: false
+			});
+			$("#fileChooserMove").show();
 		});
-		$("#fileChooserModal").slideDown();
 	});
 </script>

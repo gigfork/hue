@@ -177,7 +177,12 @@ from django.utils.encoding import smart_str
         <h3>Renaming: <span id="renameFileName">file name</span></h3>
     </div>
     <div class="modal-body">
-		<label>New name <input id="newNameInput" name="dest_path" value="" type="text" class="input-xlarge"/></label>
+		<div style="padding-left: 15px;">
+			<label>New name <input id="newNameInput" name="dest_path" value="" type="text" class="input-xlarge pathChooser"/></label>
+		</div>
+		<br/>
+		<div id="fileChooserRename" class="well hide">
+		</div>
     </div>
     <div class="modal-footer">
         <div id="renameNameRequiredAlert" class="hide" style="position: absolute; left: 10;">
