@@ -43,7 +43,7 @@ ${layout.menubar(section='permissions')}
 			<th>&nbsp;</th>
 			%endif
           </tr>
-        </head>
+        </thead>
         <tbody>
         % for perm in permissions:
           <tr class="permissionRow" data-search="${perm.app}${perm.description}${', '.join([group.name for group in Group.objects.filter(grouppermission__hue_permission=perm).order_by('name')])}">
@@ -90,6 +90,8 @@ ${layout.menubar(section='permissions')}
 		        });
 
 		    });
+
+			$("a[data-row-selector='true']").jHueRowSelector();
 
 			$("a[data-row-selector='true']").jHueRowSelector();
 
