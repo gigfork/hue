@@ -1,7 +1,7 @@
 .navbar .brand {
     color: #FFFFFF;
 }
-    
+
 .subnav {
     background-color: #EEEEEE;
     background-image: -moz-linear-gradient(center top , #F5F5F5 0%, #EEEEEE 100%);
@@ -387,6 +387,9 @@ ul.errorlist li {
 .hueBreadcrumb .active a {
     color: #333333;
 }
+.hueBreadcrumb a.nounderline:hover {
+	text-decoration:none;
+}
 
 .hueBreadcrumb > li:last-child > a {
     font-weight:bold;
@@ -410,20 +413,20 @@ div.dataTables_length label {
     float: left;
     text-align: left;
 }
- 
+
 div.dataTables_length select {
     width: 75px;
 }
- 
+
 div.dataTables_filter label {
     float: right;
     width: 460px;
 }
- 
+
 div.dataTables_info {
     padding-top: 8px;
 }
- 
+
 div.dataTables_paginate {
     float: right;
     margin: 0;
@@ -432,7 +435,7 @@ div.dataTables_paginate {
 /*
  *********************************************************/
 
- 
+
 /* Pagination nested */
 .paginate_disabled_previous, .paginate_enabled_previous, .paginate_disabled_next, .paginate_enabled_next {
 	height: 19px;

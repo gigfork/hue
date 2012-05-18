@@ -192,7 +192,7 @@ ${layout.menubar(section='designs')}
         height:270px;
     }
 
-    #fileChooserModal > ul {
+    #fileChooserModal > ul.unstyled {
         height:230px;
         overflow-y:auto;
     }
@@ -322,6 +322,7 @@ ${layout.menubar(section='designs')}
 			return $("<button>").addClass("btn").addClass("fileChooserBtn").text("..").click(function(e){
 				e.preventDefault();
 				$("#fileChooserModal").jHueFileChooser({
+					initialPath: inputElement.val(),
 	                onFileChoose: function(filePath) {
 	                    inputElement.val(filePath);
 	                    $("#chooseFile").modal("hide");

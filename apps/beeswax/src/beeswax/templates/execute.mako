@@ -364,6 +364,7 @@ ${layout.menubar(section='query')}
 			return $("<button>").addClass("btn").addClass("fileChooserBtn").text("..").click(function(e){
 				e.preventDefault();
 				$("#filechooser").jHueFileChooser({
+					initialPath: inputElement.val(),
 	                onFileChoose: function(filePath) {
 	                    inputElement.val(filePath);
 	                    $("#chooseFile").modal("hide");

@@ -203,6 +203,7 @@ ${layout.menubar(section='tables')}
 	$(document).ready(function(){
 
 		$("#filechooser").jHueFileChooser({
+			initialPath: $(".loadPath").val(),
 			onFileChoose: function(filePath){
 				$(".loadPath").val(filePath);
 				$("#filechooser").slideUp();

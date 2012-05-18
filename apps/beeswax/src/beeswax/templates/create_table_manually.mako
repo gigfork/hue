@@ -441,6 +441,7 @@ ${layout.menubar(section='tables')}
 		$("#pathChooser").click(function(){
 			var _destination = $(this).attr("data-filechooser-destination");
 			$("#filechooser").jHueFileChooser({
+				initialPath: $("input[name='"+_destination+"']").val(),
 				onFileChoose: function(filePath){
 					$("input[name='"+_destination+"']").val(filePath);
 					$("#chooseFile").modal("hide");

@@ -43,6 +43,7 @@
 		$(".pathChooser").click(function(){
 			var self = this;
 			$("#fileChooserMove").jHueFileChooser({
+				initialPath: $(self).val(),
 				onFileChoose: function(filePath) {
 					$(self).val(filePath);
 				},

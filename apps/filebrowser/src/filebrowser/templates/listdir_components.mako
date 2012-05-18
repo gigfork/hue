@@ -496,24 +496,24 @@ from django.utils.encoding import smart_str
             $("#newDirectoryNameInput").removeClass("fieldError");
             $("#directoryNameRequiredAlert").hide();
         });
+		$(".pathChooser").click(function(){
+			var self = this;
+			$("#fileChooserRename").jHueFileChooser({
+				initialPath: $(self).val(),
+				onFileChoose: function(filePath) {
+					$(self).val(filePath);
+				},
+				onFolderChange: function(folderPath){
+					$(self).val(folderPath);
+				},
+				createFolder: false,
+				uploadFile: false
+			});
+			$("#fileChooserRename").slideDown();
+		});
 
-        $(".pathChooser").click(function(){
-            var self = this;
-            $("#fileChooserRename").jHueFileChooser({
-                onFileChoose: function(filePath) {
-                    $(self).val(filePath);
-                },
-                onFolderChange: function(folderPath){
-                    $(self).val(folderPath);
-                },
-                createFolder: false,
-                uploadFile: false
-            });
-            $("#fileChooserRename").slideDown();
-        });
-
-        $("a[data-row-selector='true']").jHueRowSelector();
-    });
+		$("a[data-row-selector='true']").jHueRowSelector();
+	});
 </script>
 
 </%def>

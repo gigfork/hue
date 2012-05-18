@@ -112,8 +112,6 @@
 		});
 
 		$("#chownForm").submit(function(){
-			console.log($("select[name='user']").val());
-			console.log($("select[name='group']").val());
 			if ($("select[name='user']").val() == null){
 				$("#chownRequired").find(".label").text("Sorry, user is required.");
 				$("#chownRequired").show();

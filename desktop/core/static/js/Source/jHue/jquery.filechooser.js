@@ -20,12 +20,13 @@
         this.previousPath = "";
 		this.init();
 	}
-	
+
 	Plugin.prototype.setOptions = function(options) {
 		this.options = $.extend({}, defaults, options) ;
 	};
 
 	Plugin.prototype.navigateTo = function (path) {
+		console.log("Navigate to "+path);
 		var _parent = this;
 		currentPath = path;
 		$(_parent.element).empty();
@@ -38,10 +39,44 @@
                     _parent.options.onFolderChange(_parent.previousPath);
                     _parent.navigateTo(_parent.previousPath);
                 });
-                _previousLink.appendTo($(_parent.element));                
+                _previousLink.appendTo($(_parent.element));
             }
             else {
+				if (data.type == "file"){
+					_parent.navigateTo(data.view.dirname);
+					return;
+				}
                 _parent.previousPath = path;
+				var _breadcrumbs = $("<ul>").addClass("hueBreadcrumb").css("padding","0");
+				var _home = $("<li>");
+				var _homelink = $("<a>").addClass("nounderline").html('<i class="icon-home"></i> Home').css("cursor","pointer").click(function(){
+					_parent.navigateTo("/?default_to_home");
+				});
+				_homelink.appendTo(_home);
+				$("<span>").addClass("divider").css("margin-right","20px").appendTo(_home);
+				_home.appendTo(_breadcrumbs);
+				var _bLength = data.breadcrumbs.length;
+				$(data.breadcrumbs).each(function(cnt, crumb){
+					var _b = $("<li>");
+					var _blink = $("<a>");
+					var _label = (crumb.label != null && crumb.label != "")?crumb.label:"/";
+                    _blink.attr("href","javascript:void(0)").text(_label).appendTo(_b);
+					if (cnt<_bLength-1){
+						if (cnt>0){
+							$("<span>").addClass("divider").text("/").appendTo(_b);
+						}
+						else {
+							$("<span>").html("&nbsp;").appendTo(_b);
+						}
+					}
+					_b.click(function(){
+						var _url = (crumb.url != null && crumb.url != "")?crumb.url:"/";
+                        _parent.navigateTo(_url);
+                    });
+					_b.appendTo(_breadcrumbs);
+				});
+				_breadcrumbs.appendTo($(_parent.element));
+
                 $(data.files).each(function(cnt, file){
                     var _f = $("<li>");
                     var _flink = $("<a>");
@@ -76,7 +111,7 @@
                     _createFolderBtn.appendTo(_actions);
                     var _createFolderDetails = $("<div>").css("padding-top","10px");
                     _createFolderDetails.hide();
-                    
+
                     var _folderName = $("<input>").attr("type","text").attr("placeholder","Folder name").appendTo(_createFolderDetails);
                     $("<span> </span>").appendTo(_createFolderDetails);
                     var _folderBtn = $("<input>").attr("type","button").attr("value","Create").addClass("btn primary").appendTo(_createFolderDetails);
@@ -97,7 +132,7 @@
                                 name: _folderName.val(),
                                 path: path
                             },
-                            beforeSend: function(xhr){ 
+                            beforeSend: function(xhr){
                                 xhr.setRequestHeader("X-Requested-With", "Hue"); // need to override the default one because otherwise Django returns HTTP 500
                             },
                             success: function(xhr, status){
@@ -111,11 +146,11 @@
                                 }
                             }
                         });
-                        
+
                     });
-				
+
                     _createFolderDetails.appendTo(_actions);
-                    
+
                     _createFolderBtn.click(function(){
                         if (_uploadFileBtn){
                             _uploadFileBtn.addClass("disabled");
@@ -127,7 +162,7 @@
                 }
 			}
 		});
-		
+
 	};
 	function initUploader(path, _parent, el){
 		completeRefreshPath = path;
@@ -150,7 +185,7 @@
 			this.navigateTo(this.options.initialPath);
 		}
 		else {
-			this.navigateTo("/");
+			this.navigateTo("/?default_to_home");
 		}
 	};
 
