@@ -62,6 +62,9 @@ desktop/core/ext-py/lxml/src/lxml/lxml-version.h
 .idea/
 *.iml
 
+# Eclipse and PyCharm files
+.project
+
 # Database of running server
 desktop/desktop.db
 app.reg
