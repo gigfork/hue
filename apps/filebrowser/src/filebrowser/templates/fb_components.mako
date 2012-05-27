@@ -24,13 +24,13 @@ from django.template.defaultfilters import urlencode
 			<a href="#" class="btn create-directory-link">New directory</a>
 		</p>
         <ul class="nav nav-pills">
-          <li><a href="${url('filebrowser.views.view', path=urlencode(path))}?default_to_home"><i class="icon-home"></i>Home</a></li>
+          <li><a href="${url('filebrowser.views.view', path=urlencode(path))}?default_to_home"><i class="icon-home"></i> Home</a></li>
           <li>
             <ul class="hueBreadcrumb">
                 % for breadcrumb_item in breadcrumbs:
                     <% label = breadcrumb_item['label'] %>
                     %if label == '/':
-                        <li><a href="/filebrowser/view${breadcrumb_item['url']}"><span
+                        <li><a href="/filebrowser/view${breadcrumb_item['url']}?to_root"><span
                             class="divider">${label | h}<span></a></li>
                     %else:
                         <li><a href="/filebrowser/view${breadcrumb_item['url']}">${label | h}</a><span class="divider">/</span></li>

@@ -355,6 +355,7 @@ def listdir_paged(request, path, chooser):
       filter=?          - Specify a substring filter to search for in
                           the 'path', 'user' and 'group' fields.
     """
+
     if not request.fs.isdir(path):
         raise PopupException("Not a directory: %s" % (path,))
 
@@ -362,6 +363,9 @@ def listdir_paged(request, path, chooser):
     pagesize = int(request.GET.get('pagesize', 15))
 
     home_dir_path = request.user.get_home_directory()
+    if path == '/' and 'to_root' not in request.GET and request.fs.isdir(home_dir_path):
+      path = home_dir_path
+
     breadcrumbs = parse_breadcrumbs(path)
 
     all_stats = request.fs.listdir_stats(path)
