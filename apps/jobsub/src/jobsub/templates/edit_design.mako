@@ -37,20 +37,20 @@ ${layout.menubar(section='designs')}
 
 
 <%def name="render_field(field)">
-  %if not field.is_hidden:
-    <% group_class = len(field.errors) and "error" or "" %>
-    <div class="control-group ${group_class}">
-      <label class="control-label">${field.label | n}</label>
-      <div class="controls">
-        <input name="${field.html_name | n}"
-            class="span5 ${field.field.widget.attrs.get('class', '')}"
-            value="${extract_field_data(field) or ''}" />
-        % if len(field.errors):
-          <span class="help-inline">${unicode(field.errors) | n}</span>
-        % endif
-      </div>
-    </div>
-  %endif
+    %if not field.is_hidden:
+        <% group_class = len(field.errors) and "error" or "" %>
+        <div class="control-group ${group_class}">
+            <label class="control-label">${field.label | n}</label>
+            <div class="controls">
+                <input name="${field.html_name | n}"
+                       class="span5 ${field.field.widget.attrs.get('class', '')}"
+                       value="${extract_field_data(field) or ''}" />
+                % if len(field.errors):
+                    <span class="help-inline">${unicode(field.errors) | n}</span>
+                % endif
+            </div>
+        </div>
+    %endif
 </%def>
 
 <div class="container-fluid">
@@ -167,6 +167,7 @@ ${layout.menubar(section='designs')}
 <div id="chooseFile" class="modal hide fade">
     <div class="modal-header">
         <a href="#" class="close" data-dismiss="modal">&times;</a>
+
         <h3>Choose a file</h3>
     </div>
     <div class="modal-body">
@@ -179,53 +180,56 @@ ${layout.menubar(section='designs')}
 
 
 <style>
-	.pathChooser, .pathChooserKo {
-		border-radius: 3px 0 0 3px;
-		border-right:0;
-	}
-	.fileChooserBtn {
-		border-radius: 0 3px 3px 0;
-	}
+    .pathChooser, .pathChooserKo {
+        border-radius: 3px 0 0 3px;
+        border-right: 0;
+    }
+
+    .fileChooserBtn {
+        border-radius: 0 3px 3px 0;
+    }
 
     #fileChooserModal {
-        padding:14px;
-        height:270px;
+        padding: 14px;
+        height: 270px;
     }
 
     #fileChooserModal > ul.unstyled {
-        height:230px;
-        overflow-y:auto;
+        height: 230px;
+        overflow-y: auto;
     }
 
-	.designTable {
-		margin-left:0;
-	}
-	.designTable th, .designTable td {
-	    padding-left: 0;
-	}
-	.designTable th {
-		text-align:left;
-	}
+    .designTable {
+        margin-left: 0;
+    }
+
+    .designTable th, .designTable td {
+        padding-left: 0;
+    }
+
+    .designTable th {
+        text-align: left;
+    }
 </style>
 
 
 <script type="text/javascript" charset="utf-8">
-    $(document).ready(function(){
+    $(document).ready(function () {
         var propertiesHint = ${properties_hint};
 
         // The files and archives are dictionaries in the model, because we
         // can add and remove it the same way we add/remove properties.
         // But the server expects them to be arrays. So we transform the
         // two representations back and forth.
-        var arrayToDictArray = function(arr) {
+        var arrayToDictArray = function (arr) {
             var res = [ ];
             for (var i in arr) {
-                res.push( { name: arr[i], dummy: "" } );
+                res.push({ name:arr[i], dummy:"" });
             }
             return res;
         };
 
-        var dictArrayToArray = function(dictArray) {
+        var dictArrayToArray = function (dictArray) {
             var res = [ ];
             for (var i in dictArray) {
                 res.push(dictArray[i]["name"]);
@@ -235,10 +239,10 @@ ${layout.menubar(section='designs')}
 
         // Handles adding autocomplete to job properties.
         // We need to propagate the selected value to knockoutjs.
-        var addAutoComplete = function(i, elem) {
+        var addAutoComplete = function (i, elem) {
             $(elem).autocomplete({
-                source: propertiesHint,
-                select: function(event, ui) {
+                source:propertiesHint,
+                select:function (event, ui) {
                     var context = ko.contextFor(this);
                     context.$data.name = ui.item.value;
 
@@ -246,7 +250,7 @@ ${layout.menubar(section='designs')}
             });
         };
 
-        var ViewModel = function(properties, files, archives) {
+        var ViewModel = function (properties, files, archives) {
             var self = this;
 
             self.properties = ko.observableArray(properties);
@@ -254,48 +258,48 @@ ${layout.menubar(section='designs')}
             self.archives = ko.observableArray(archives);
             self.myVar = ko.observable();
 
-            self.addProp = function() {
-                self.properties.push({ name: "", value: "" });
+            self.addProp = function () {
+                self.properties.push({ name:"", value:"" });
                 $(".propKey:last").each(addAutoComplete);
             };
 
-            self.removeProp = function(val) {
+            self.removeProp = function (val) {
                 self.properties.remove(val);
             };
 
-            self.addFile = function() {
-                self.files.push({ name: "", dummy: "" });
+            self.addFile = function () {
+                self.files.push({ name:"", dummy:"" });
             };
 
-            self.removeFile = function(val) {
+            self.removeFile = function (val) {
                 self.files.remove(val);
             };
 
-            self.addArchive = function() {
-                self.archives.push({ name: "", dummy: "" });
+            self.addArchive = function () {
+                self.archives.push({ name:"", dummy:"" });
             };
 
-            self.removeArchive = function(val) {
+            self.removeArchive = function (val) {
                 self.archives.remove(val);
             };
 
-            self.submit = function(form) {
+            self.submit = function (form) {
                 var form = $("#workflowForm");
                 var files_arr = dictArrayToArray(ko.toJS(self.files));
                 var archives_arr = dictArrayToArray(ko.toJS(self.archives));
 
                 $("<input>").attr("type", "hidden")
-                    .attr("name", "action-job_properties")
-                    .attr("value", ko.utils.stringifyJson(self.properties))
-                    .appendTo(form);
+                        .attr("name", "action-job_properties")
+                        .attr("value", ko.utils.stringifyJson(self.properties))
+                        .appendTo(form);
                 $("<input>").attr("type", "hidden")
-                    .attr("name", "action-files")
-                    .attr("value", JSON.stringify(files_arr))
-                    .appendTo(form);
+                        .attr("name", "action-files")
+                        .attr("value", JSON.stringify(files_arr))
+                        .appendTo(form);
                 $("<input>").attr("type", "hidden")
-                    .attr("name", "action-archives")
-                    .attr("value", JSON.stringify(archives_arr))
-                    .appendTo(form);
+                        .attr("name", "action-archives")
+                        .attr("value", JSON.stringify(archives_arr))
+                        .appendTo(form);
                 form.submit();
             };
         };
@@ -305,34 +309,33 @@ ${layout.menubar(section='designs')}
                 arrayToDictArray(${archives}));
 
         ko.bindingHandlers.fileChooser = {
-            init: function(element, valueAccessor, allBindings, model) {
-				var self = $(element);
-				self.after(getFileBrowseButton(self));
+            init:function (element, valueAccessor, allBindings, model) {
+                var self = $(element);
+                self.after(getFileBrowseButton(self));
             }
         };
 
         ko.applyBindings(viewModel);
 
-		$(".pathChooser").each(function(){
-			var self = $(this);
-			self.after(getFileBrowseButton(self));
-		});
+        $(".pathChooser").each(function () {
+            var self = $(this);
+            self.after(getFileBrowseButton(self));
+        });
 
-		function getFileBrowseButton(inputElement) {
-			return $("<button>").addClass("btn").addClass("fileChooserBtn").text("..").click(function(e){
-				e.preventDefault();
-				$("#fileChooserModal").jHueFileChooser({
-					initialPath: inputElement.val(),
-	                onFileChoose: function(filePath) {
-	                    inputElement.val(filePath);
-	                    $("#chooseFile").modal("hide");
-	                },
-	                createFolder: false
-	            });
-	            $("#chooseFile").modal("show");
-			})
-		}
-
+        function getFileBrowseButton(inputElement) {
+            return $("<button>").addClass("btn").addClass("fileChooserBtn").text("..").click(function (e) {
+                e.preventDefault();
+                $("#fileChooserModal").jHueFileChooser({
+                    initialPath:inputElement.val(),
+                    onFileChoose:function (filePath) {
+                        inputElement.val(filePath);
+                        $("#chooseFile").modal("hide");
+                    },
+                    createFolder:false
+                });
+                $("#chooseFile").modal("show");
+            })
+        }
 
         $(".propKey").each(addAutoComplete);
     });
