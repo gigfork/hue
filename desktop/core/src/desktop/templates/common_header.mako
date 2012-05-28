@@ -20,59 +20,73 @@ from desktop.lib.i18n import smart_unicode
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8">
-  <title>${smart_unicode(title) | h}</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="">
-  <meta name="author" content="">
+    <meta charset="utf-8">
+    <title>${smart_unicode(title) | h}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
 
-  <link href="/static/ext/css/bootstrap.min.css" rel="stylesheet">
-  <link href="/static/css/hue2.css" rel="stylesheet">
-  <link href="/static/ext/css/fileuploader.css" rel="stylesheet">
+    <link href="/static/ext/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/static/css/hue2.css" rel="stylesheet">
+    <link href="/static/ext/css/fileuploader.css" rel="stylesheet">
 
-  <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
-  <!--[if lt IE 9]>
-  <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
-  <![endif]-->
+    <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+    <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
 
-  <style type="text/css">
-    body {
-      padding-top: ${padding};
-    }
-  </style>
-
-  <script src="/static/ext/js/jquery/jquery-1.7.1.min.js"></script>
-  <script src="/static/js/Source/jHue/jquery.showusername.js"></script>
-  <script src="/static/js/Source/jHue/jquery.filechooser.js"></script>
-  <script src="/static/js/Source/jHue/jquery.selector.js"></script>
-  <script src="/static/js/Source/jHue/jquery.rowselector.js"></script>
-  <script src="/static/ext/js/jquery/plugins/jquery.simpleplaceholder.js"></script>
-  <script src="/static/ext/js/jquery/plugins/jquery.dataTables.1.8.2.min.js"></script>
-  <script src="/static/ext/js/bootstrap.min.js"></script>
-  <script src="/static/ext/js/fileuploader.js"></script>
-
-  <script type="text/javascript" charset="utf-8">
-    $(document).ready(function(){
-      $("#username").jHueUsername({
-		onLoad: function(user){
-			$(".userProfile").attr("href","/useradmin/users/edit/"+user.username);
-			$("#usernameDropdown").show();
-		}
-	  });
-      $("input:text[placeholder]").simplePlaceholder();
-      $(".submitter").keydown(function(e){
-        if (e.keyCode==13){
-          $(this).closest("form").submit();
+    <style type="text/css">
+        body {
+            padding-top: ${padding};
         }
-      }).change(function(){
-        $(this).closest("form").submit();
-      });
-      $("#checkConfig").load("/debug/check_config_ajax");
-      $(".navbar .nav-tooltip").tooltip({
-        delay:0,
-        placement:'bottom'});
-    });
-  </script>
+    </style>
+
+    <script src="/static/ext/js/jquery/jquery-1.7.1.min.js"></script>
+    <script src="/static/js/Source/jHue/jquery.showusername.js"></script>
+    <script src="/static/js/Source/jHue/jquery.filechooser.js"></script>
+    <script src="/static/js/Source/jHue/jquery.selector.js"></script>
+    <script src="/static/js/Source/jHue/jquery.rowselector.js"></script>
+    <script src="/static/ext/js/jquery/plugins/jquery.simpleplaceholder.js"></script>
+    <script src="/static/ext/js/jquery/plugins/jquery.dataTables.1.8.2.min.js"></script>
+    <script src="/static/ext/js/bootstrap.min.js"></script>
+    <script src="/static/ext/js/fileuploader.js"></script>
+
+    <script type="text/javascript" charset="utf-8">
+        $(document).ready(function(){
+            $("#username").jHueUsername({
+                onLoad: function(user){
+                    $(".userProfile").attr("href","/useradmin/users/edit/"+user.username);
+                    $("#usernameDropdown").show();
+                }
+            });
+            $("input:text[placeholder]").simplePlaceholder();
+
+            var submitterTimeout = -1;
+            $(".submitter").each(function(){
+                $(this).data("lastKnownValue", $(this).val());
+                console.log("Initializing with "+ $(this).val());
+            }).keydown(function(e){
+                if (e.keyCode==13){
+                    $(this).closest("form").submit();
+                }
+            }).change(function(){
+                $(this).closest("form").submit();
+            }).keyup(function(){
+                var self = $(this);
+                clearTimeout(submitterTimeout);
+                submitterTimeout = setTimeout(function(){
+                    if (self.val() != self.data("lastKnownValue")){
+                        self.closest("form").submit();
+                    }
+                    self.data("lastKnownValue", self.val());
+                }, 650);
+            });
+            $("#checkConfig").load("/debug/check_config_ajax");
+            $(".navbar .nav-tooltip").tooltip({
+                delay:0,
+                placement:'bottom'});
+        });
+    </script>
 </head>
 <body>
 

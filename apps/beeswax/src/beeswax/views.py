@@ -642,7 +642,7 @@ def _list_designs(querydict, page_size, prefix="", user=None):
   page = paginator.page(pagenum)
 
   # We need to pass the parameters back to the template to generate links
-  keys_to_copy = [ prefix + key for key in ('user', 'type', 'sort') ]
+  keys_to_copy = [ prefix + key for key in ('user', 'type', 'sort', 'text') ]
   filter_params = copy_query_dict(querydict, keys_to_copy)
 
   return page, filter_params

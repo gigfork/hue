@@ -23,6 +23,23 @@ ${commonheader("Beeswax: Queries", "beeswax", "100px")}
 ${layout.menubar(section='saved queries')}
 <div class="container-fluid">
     <h1>Beeswax: Queries</h1>
+
+    <div class="well hueWell">
+        <div class="btn-group pull-right">
+            <a class="btn" href="/beeswax/">Create New Query</a>
+        </div>
+
+        <form action="/beeswax/list_designs" method="GET" class="form-search">
+            <%
+            filterVal = ""
+            if "text" in filter_params:
+                filterVal = filter_params["text"]
+            endif
+            %>
+            Filter: <input id="filterInput" name="text" placeholder="Search for name or description" class="input-xlarge search-query submitter" value="${filterVal}">
+        </form>
+    </div>
+
     <table class="table table-striped table-condensed datatables">
         <thead>
         <tr>
@@ -114,6 +131,16 @@ ${layout.menubar(section='saved queries')}
 
 <script type="text/javascript" charset="utf-8">
     $(document).ready(function(){
+        if ($("#filterInput").val() != ""){
+            $("#filterInput").focus();
+            if ($("#filterInput")[0].setSelectionRange){
+                var len = $("#filterInput").val().length * 2;
+                $("#filterInput")[0].setSelectionRange(len, len);
+            }
+            else{
+                $("#filterInput").val($("#filterInput").val());
+            }
+        }
 
         $(".datatables").dataTable({
             "bPaginate": false,
