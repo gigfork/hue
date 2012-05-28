@@ -30,15 +30,25 @@ ${layout.menubar(section='my queries')}
 <div class="container-fluid">
     <h1>Beeswax: My Queries</h1>
 
+    <div class="well hueWell">
+        <div class="btn-group pull-right">
+            <a class="btn" href="/beeswax/">Create New Query</a>
+        </div>
+
+        <form class="form-search">
+            Filter: <input placeholder="Search for name, description, etc..." class="input-xlarge search-query" id="filterInput">
+        </form>
+    </div>
+
     <ul class="nav nav-tabs">
-        <li class="active"><a href="#recentSavedQueries" data-toggle="tab">Recent Saved Queries</a></li>
-        <li><a href="#recentRunQueries" data-toggle="tab">Recent Run Queries</a></li>
+        <li class="active"><a href="#recentSavedQueries" data-toggle="tab">Recent Saved Queries &nbsp;<span id="recentSavedQueriesFilterCnt" class="badge badge-info hide"></span></a></li>
+        <li><a href="#recentRunQueries" data-toggle="tab">Recent Run Queries  &nbsp;<span id="recentRunQueriesFilterCnt" class="badge badge-info hide"></span></a></li>
     </ul>
 
     <div class="tab-content">
         <div class="active tab-pane" id="recentSavedQueries">
 
-            <table class="table table-striped table-condensed datatables">
+            <table id="recentSavedQueriesTable" class="table table-striped table-condensed datatables">
                 <thead>
                     <tr>
                         <th>Name</th>
@@ -104,7 +114,7 @@ ${layout.menubar(section='my queries')}
         </div>
 
         <div class="tab-pane" id="recentRunQueries">
-            <table class="table table-striped table-condensed datatables">
+            <table id="recentRunQueriesTable" class="table table-striped table-condensed datatables">
                 <thead>
                     <tr>
                         <th>Time</th>
@@ -175,11 +185,11 @@ ${layout.menubar(section='my queries')}
 
 <script type="text/javascript" charset="utf-8">
     $(document).ready(function(){
-        $(".datatables").dataTable({
+        var recentSavedQueries = $("#recentSavedQueriesTable").dataTable({
+            "sDom": "<'row'r>t<'row'<'span8'i><''p>>",
             "bPaginate": false,
             "bLengthChange": false,
             "bInfo": false,
-            "bFilter": false,
             "aoColumns": [
                 null,
                 null,
@@ -187,6 +197,49 @@ ${layout.menubar(section='my queries')}
                 null,
                 { "bSortable": false }
             ]
+        });
+
+        var recentRunQueries = $("#recentRunQueriesTable").dataTable({
+            "sDom": "<'row'r>t<'row'<'span8'i><''p>>",
+            "bPaginate": false,
+            "bLengthChange": false,
+            "bInfo": false,
+            "aoColumns": [
+                null,
+                null,
+                null,
+                null,
+                { "bSortable": false }
+            ]
+        });
+
+
+        $("#filterInput").keyup(function() {
+            recentSavedQueries.fnFilter($(this).val());
+            recentRunQueries.fnFilter($(this).val());
+            if ($.trim($(this).val()) != ""){
+                var recentSavedQueriesCnt = $("#recentSavedQueriesTable tbody tr").length;
+                var isRecentSavedQueriesEmpty = ($("#recentSavedQueries tbody tr td.dataTables_empty").length == 1)
+                if (recentSavedQueriesCnt > 0 && !isRecentSavedQueriesEmpty){
+                    $("#recentSavedQueriesFilterCnt").text(recentSavedQueriesCnt).show();
+                }
+                else {
+                    $("#recentSavedQueriesFilterCnt").hide().text("");
+                }
+
+                var recentRunQueriesCnt = $("#recentRunQueriesTable tbody tr").length;
+                var isRecentRunQueriesEmpty = ($("#recentRunQueriesTable tbody tr td.dataTables_empty").length == 1)
+                if (recentRunQueriesCnt > 0 && !isRecentRunQueriesEmpty){
+                    $("#recentRunQueriesFilterCnt").text(recentRunQueriesCnt).show();
+                }
+                else {
+                    $("#recentRunQueriesFilterCnt").hide().text("");
+                }
+            }
+            else {
+                $("#recentSavedQueriesFilterCnt").hide().text("");
+                $("#recentRunQueriesFilterCnt").hide().text("");
+            }
         });
 
         $(".confirmationModal").live("click", function(){
