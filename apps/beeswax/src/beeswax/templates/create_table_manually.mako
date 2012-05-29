@@ -185,9 +185,9 @@ ${layout.menubar(section='tables')}
                         Use <strong>InputFormat</strong> to choose a custom implementation.<br/>
                     </div>
 
-					<div class="clearfix">
-						<label id="fileFormatRadio">File format</label>
-						<div class="input">
+					<div class="control-group">
+						<label id="fileFormatRadio" class="control-label">File format</label>
+						<div class="controls">
 							${comps.field(table_form["file_format"],
 				              render_default=True,
 				              klass="bw-file_formats",
@@ -196,9 +196,9 @@ ${layout.menubar(section='tables')}
 						</div>
 					</div>
 					<div id="inputFormatDetails" class="hide">
-						<div class="clearfix">
-							${comps.label(table_form["input_format_class"])}
-							<div class="input">
+						<div class="control-group">
+							${comps.bootstrapLabel(table_form["input_format_class"])}
+							<div class="controls">
 								${comps.field(table_form["input_format_class"], attrs=dict(
 									placeholder='com.acme.data.MyInputFormat',
 					              )
@@ -208,9 +208,9 @@ ${layout.menubar(section='tables')}
 								</span>
 							</div>
 						</div>
-						<div class="clearfix">
-							${comps.label(table_form["output_format_class"])}
-							<div class="input">
+						<div class="control-group">
+							${comps.bootstrapLabel(table_form["output_format_class"])}
+							<div class="controls">
 								${comps.field(table_form["output_format_class"], attrs=dict(
 									placeholder='com.acme.data.MyOutputFormat',
 					              )
@@ -225,86 +225,72 @@ ${layout.menubar(section='tables')}
 			</div>
 			<div id="step5" class="stepDetails hide">
 				<fieldset>
-					<legend>Choose Where Your Table's Data is Stored</legend>
+                    <div class="alert alert-info"><h3>Choose Where Your Table's Data is Stored</h3>
+                    </div>
 
-					<div class="clearfix">
-						<label>Location</label>
-						<div class="input">
-							<ul class="inputs-list">
-								<li>
-									<label>
-				                    	${comps.field(table_form["use_default_location"],
-							                render_default=True
-							              )}
-										<span>Use default location</span>
-									</label>
-									<span class="help-block">
-										Store your table in the default location (controlled by Hive, and typically <em>/user/hive/warehouse/table_name</em>).
-									</span>
-				                </li>
-							</ul>
+					<div class="control-group">
+						<label class="control-label">Location</label>
+						<div class="controls">
+                            <label class="checkbox">
+                                ${comps.field(table_form["use_default_location"],
+                                render_default=True
+                                )}
+                                Use default location
+                            </label>
+							<span class="help-block">
+                                Store your table in the default location (controlled by Hive, and typically <em>/user/hive/warehouse/table_name</em>).
+							</span>
 						</div>
 					</div>
 
-					<div id="location" class="hide">
-						<div class="clearfix">
-							${comps.label(table_form["external_location"])}
-							<div class="input">
-								${comps.field(table_form["external_location"], attrs=dict(
-									placeholder='/user/user_name/data_dir',
-					              )
-					            )}
-								<span class="help-inline"><a id="pathChooser" href="#" data-filechooser-destination="table-external_location">Choose File</a></span>
-								<span class="help-block">
-								Enter the path (on HDFS) to your table's data location
-								</span>
-							</div>
-						</div>
-					</div>
+                    <div id="location" class="control-group hide">
+                        ${comps.bootstrapLabel(table_form["external_location"])}
+                        <div class="controls">
+                            ${comps.field(table_form["external_location"], attrs=dict(
+                                placeholder='/user/user_name/data_dir',
+                              )
+                            )}
+                            <span class="help-inline"><a id="pathChooser" href="#" class="btn" data-filechooser-destination="table-external_location">Choose File</a></span>
+                            <span class="help-block">
+                            Enter the path (on HDFS) to your table's data location
+                            </span>
+                        </div>
+                    </div>
 				</fieldset>
 			</div>
 				<div id="step6" class="stepDetails hide">
 					<fieldset>
-						<legend>Configure Table Columns</legend>
+                        <div class="alert alert-info"><h3>Configure Table Columns</h3>
+                        </div>
 						% for form in columns_form.forms:
 			                ${render_column(form)}
 			            %endfor
 						<div class="hide">
 			              ${unicode(columns_form.management_form) | n}
 			            </div>
-						<div class="clearfix">
-							<div class="input">
-								<button class="btn" value="True" name="columns-add" type="submit">Add a column</button>
-							</div>
-						</div>
+						<button class="btn" value="True" name="columns-add" type="submit">Add a column</button>
 					</fieldset>
+                    <br/><br/>
 					<fieldset>
-						<legend>Configure Partitions</legend>
-						<div class="clearfix">
-							<div class="input">
-								If your data is naturally partitioned (by, say, date),
-					              partitions are a way to tell Hive that data
-					              for a specific partition value are stored together.
-					              Hive establishes a mapping between directories on disk
-					              (<em>e.g.,</em> <code>/user/hive/warehouse/logs/dt=20100101/</code>)
-					              and the data for that day.  Partitions are virtual
-					              columns; they are not represented in the data themselves,
-					              but are determined by the data location.  Hive implements
-					              query optimizations such that queries that are specific
-					              to a single partition need not read the data in other partitions.
-							</div>
-						</div>
+                        <div class="alert alert-info"><h3>Configure Partitions</h3>
+                            If your data is naturally partitioned (by, say, date),
+                            partitions are a way to tell Hive that data
+                            for a specific partition value are stored together.
+                            Hive establishes a mapping between directories on disk
+                            (<em>e.g.,</em> <code>/user/hive/warehouse/logs/dt=20100101/</code>)
+                            and the data for that day.  Partitions are virtual
+                            columns; they are not represented in the data themselves,
+                            but are determined by the data location.  Hive implements
+                            query optimizations such that queries that are specific
+                            to a single partition need not read the data in other partitions.
+                        </div>
 						% for form in partitions_form.forms:
 		                  ${render_column(form, True)}
 		                % endfor
 						<div class="hide">
 			              ${unicode(partitions_form.management_form) | n}
 			            </div>
-						<div class="clearfix">
-							<div class="input">
-								<button class="btn" value="True" name="partitions-add" type="submit">Add a partition</button>
-							</div>
-						</div>
+					    <button class="btn" value="True" name="partitions-add" type="submit">Add a partition</button>
 
 					</fieldset>
 				</div>
@@ -321,76 +307,73 @@ ${layout.menubar(section='tables')}
 
 
 
-		<%def name="render_column(form, is_partition_form=False)">
-			<div class="cnt">
-			<div class="clearfix">
-				<label>Column name</label>
-				<div class="input">
-					<input name="${form["column_name"].html_name | n}" value="${form["column_name"].data or ''}" placeholder="Column Name"/>
-					<span class="help-inline">
-					Column name must be single words that start with a letter or a digit.
-					</span>
-				</div>
-			</div>
-			<div class="clearfix">
-				<label>Column type</label>
-				<div class="input columnType">
-					${comps.field(form["column_type"],
-                        render_default=True
-                      )}
-					<span class="help-inline">
-					Type for this column.  Certain advanced types (namely, structs) are not exposed in this interface.
-					</span>
-				</div>
-			</div>
-			 % if is_partition_form == False:
-			<div class="arraySpec hide">
-				<div class="clearfix">
-					<label>Array value type</label>
-					<div class="input">
-						${comps.field(form["array_type"], render_default=True)}
-						<span class="help-inline">
-						Type of the array values.
-						</span>
-					</div>
-				</div>
-			</div>
-			<div class="mapSpec hide">
-				<div class="clearfix">
-					<label>Map Key type</label>
-					<div class="input">
-						${comps.field(form["map_key_type"], render_default=True)}
-						<span class="help-inline">
-						Type of the map keys.
-						</span>
-					</div>
-				</div>
-				<div class="clearfix">
-					<label>Map Value type</label>
-					<div class="input">
-						${comps.field(form["map_value_type"], render_default=True)}
-						<span class="help-inline">
-						Type of the map values.
-						</span>
-					</div>
-				</div>
-			</div>
-			% endif
-			<div class="clearfix">
-				<div class="input">
-					${comps.field(form['_deleted'], tag="button", button_text="Remove", notitle=True, attrs=dict(
-						type="submit",
-						title="Delete this column",
-						klass="btn small danger"
-					), value=True)}
+<%def name="render_column(form, is_partition_form=False)">
+    <div class="cnt well">
+        <div class="remove">
+            ${comps.field(form['_deleted'], tag="button", button_text="x", notitle=True, attrs=dict(
+            type="submit",
+            title="Delete this column",
+            klass="btn btn-mini removeBtn"
+            ), value=True)}
+        </div>
+        <div class="control-group">
+            <label class="control-label">Column name</label>
+            <div class="controls">
+                <input name="${form["column_name"].html_name | n}" value="${form["column_name"].data or ''}" placeholder="Column Name"/>
+                <span class="help-inline">
+                Column name must be single words that start with a letter or a digit.
+                </span>
+            </div>
+        </div>
+        <div class="control-group">
+            <label class="control-label">Column type</label>
+            <div class="controls columnType">
+                ${comps.field(form["column_type"],
+                render_default=True
+                )}
+                <span class="help-inline">
+                Type for this column.  Certain advanced types (namely, structs) are not exposed in this interface.
+                </span>
+            </div>
+        </div>
+        % if is_partition_form == False:
+            <div class="arraySpec hide">
+                <div class="control-group">
+                    <label class="control-label">Array value type</label>
+                    <div class="controls">
+                    ${comps.field(form["array_type"], render_default=True)}
+                        <span class="help-inline">
+                            Type of the array values.
+                        </span>
+                    </div>
+                </div>
+            </div>
+            <div class="mapSpec hide">
+                <div class="control-group">
+                    <label class="control-label">Map Key type</label>
+                    <div class="controls">
+                        ${comps.field(form["map_key_type"], render_default=True)}
+                        <span class="help-inline">
+                        Type of the map keys.
+                        </span>
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label class="control-label">Map Value type</label>
+                    <div class="controls">
+                        ${comps.field(form["map_value_type"], render_default=True)}
+                        <span class="help-inline">
+                            Type of the map values.
+                        </span>
+                    </div>
+                </div>
+            </div>
+        % endif
+    ${unicode(form["_exists"]) | n}
 
-				</div>
-			</div>
-            ${unicode(form["_exists"]) | n}
+    </div>
 
-			</div>
-
-            </%def>
+</%def>
 
 
 
@@ -414,6 +397,13 @@ ${layout.menubar(section='tables')}
 		overflow-y:scroll;
 		margin-top:10px;
 	}
+    .inputs-list {
+        list-style: none outside none;
+        margin-left: 0;
+    }
+    .remove {
+        float:right;
+    }
 </style>
 </div>
 <script type="text/javascript" charset="utf-8">

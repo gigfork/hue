@@ -64,7 +64,6 @@ from desktop.lib.i18n import smart_unicode
             var submitterTimeout = -1;
             $(".submitter").each(function(){
                 $(this).data("lastKnownValue", $(this).val());
-                console.log("Initializing with "+ $(this).val());
             }).keydown(function(e){
                 if (e.keyCode==13){
                     $(this).closest("form").submit();
