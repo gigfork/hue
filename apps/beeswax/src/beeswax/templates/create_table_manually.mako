@@ -42,122 +42,104 @@ ${layout.menubar(section='tables')}
 		    <li><a href="#step5" class="step">Step 5: Location</a></li>
 		    <li><a href="#step6" class="step">Step 6: Columns</a></li>
 		</ul>
-		<br/>
-		<form action="#" method="POST" id="mainForm" class="form-inline">
+		<form action="#" method="POST" id="mainForm" class="form-horizontal">
 			<div id="step1" class="stepDetails">
 				<fieldset>
-					<legend>Create your table</legend>
-					<div class="clearfix">
-						<div class="input">
-							<span>Let's start with a name and description for where we'll store your data.</span>
-						</div>
-					</div>
-					<div class="clearfix">
-						${comps.label(table_form["name"])}
-						<div class="input">
+                    <div class="alert alert-info"><h3>Create a table</h3>Let's start with a name and description for where we'll store your data.</div>
+					<div class="control-group">
+						${comps.bootstrapLabel(table_form["name"])}
+						<div class="controls">
 							${comps.field(table_form["name"], attrs=dict(
 								placeholder='table_name',
 				              )
 				            )}
-							<span class="help-block">
+							<p class="help-block">
 							Name of the new table.  Table names must be globally unique.  Table names tend to correspond as well to the directory where the data will be stored.
-							</span>
+							</p>
 						</div>
 					</div>
-					<div class="clearfix">
-						${comps.label(table_form["comment"])}
-						<div class="input">
+					<div class="control-group">
+						${comps.bootstrapLabel(table_form["comment"])}
+						<div class="controls">
 							${comps.field(table_form["comment"], attrs=dict(
 								placeholder='Optional',
 				              )
 				            )}
-							<span class="help-block">
+							<p class="help-block">
 							Use a table comment to describe your table.  For example, you might mention the data's provenance, and any caveats users of this table should expect.
-							</span>
+							</p>
 						</div>
 					</div>
 				</fieldset>
 			</div>
 			<div id="step2" class="stepDetails hide">
 				<fieldset>
-					<legend>Choose Your Record Format</legend>
-					<div class="clearfix">
-						<div class="input">
-							<span>Individual records are broken up into columns
+                    <div class="alert alert-info"><h3>Choose Your Record Format</h3>
+                        Individual records are broken up into columns
 					          either with delimiters (e.g., CSV or TSV) or using
 					          a specific serialization / deserialization (SerDe) implementation.
 					          (One common specialized SerDe is for parsing out columns with a regular
-					          expression.)</span>
-						</div>
+					          expression.)
 					</div>
 					<%
 		              selected = table_form["row_format"].data or table_form["row_format"].field.initial
 		            %>
-					<div class="clearfix">
-						<label id="formatRadio">Record format</label>
-						<div class="input">
-							<ul class="inputs-list">
-								<li>
-									<label>
-				                    	<input type="radio" name="table-row_format" value="Delimited"
-						                  % if selected == "Delimited":
-						                    checked
-						                  % endif
-						                >
-										<span>Delimited</span>
-									</label>
-									<span class="help-block">
-									Data files use delimiters, like commas (CSV) or tabs.
-									</span>
-				                </li>
-								<li>
-									<label>
-				                    	<input type="radio" name="table-row_format" value="SerDe"
-						                  % if selected == "SerDe":
-						                    checked
-						                  % endif
-						                >
-										<span>SerDe</span>
-									</label>
-									<span class="help-block">
-									Enter a specialized serialization implementation.
-									</span>
-								</li>
-							</ul>
+					<div class="control-group">
+						<label class="control-label" id="formatRadio">Record format</label>
+						<div class="controls">
+                            <label class="radio">
+                                <input type="radio" name="table-row_format" value="Delimited"
+                                    % if selected == "Delimited":
+                                       checked
+                                    % endif
+                                >
+                                Delimited
+                                <span class="help-inline">
+							    (Data files use delimiters, like commas (CSV) or tabs.)
+							    </span>
+                            </label>
+                            <label class="radio">
+                                <input type="radio" name="table-row_format" value="SerDe"
+                                    % if selected == "SerDe":
+                                       checked
+                                    % endif
+                                        >
+                                SerDe
+                                <span class="help-inline">
+                                (Enter a specialized serialization implementation.)
+                                </span>
+                            </label>
 						</div>
 					</div>
 				</fieldset>
 			</div>
 			<div id="step3" class="stepDetails hide">
 				<fieldset>
-					<legend>Configure Record Serialization</legend>
 					<div id="step3Delimited" class="stepDetailsInner">
-						<div class="clearfix">
-							<div class="input">
-								<span>Hive only supports single-character delimiters. </span>
-							</div>
-						</div>
-						<div class="clearfix">
-							${comps.label(table_form["field_terminator"])}
-							<div class="input">
+                        <div class="alert alert-info"><h3>Configure Record Serialization</h3>
+                            Hive only supports single-character delimiters.
+                        </div>
+						<div class="control-group">
+							${comps.bootstrapLabel(table_form["field_terminator"])}
+							<div class="controls">
 								${comps.field(table_form["field_terminator"], render_default=True)}
 								<span class="help-block">
 								Enter the column delimiter.  Must be a single character.  Use syntax like "\001" or "\t" for special characters.
 								</span>
 							</div>
 						</div>
-						<div class="clearfix">
-							${comps.label(table_form["collection_terminator"])}
-							<div class="input">
+						<div class="control-group">
+							${comps.bootstrapLabel(table_form["collection_terminator"])}
+							<div class="controls">
 								${comps.field(table_form["collection_terminator"], render_default=True)}
 								<span class="help-block">
 								Use for array types.
 								</span>
 							</div>
 						</div>
-						<div class="clearfix">
-							${comps.label(table_form["map_key_terminator"])}
-							<div class="input">
+						<div class="control-group">
+							${comps.bootstrapLabel(table_form["map_key_terminator"])}
+							<div class="controls">
 								${comps.field(table_form["map_key_terminator"], render_default=True)}
 								<span class="help-block">
 								Use for map types.
@@ -166,9 +148,11 @@ ${layout.menubar(section='tables')}
 						</div>
 					</div>
 					<div id="step3SerDe" class="hide stepDetailsInner">
-						<div class="clearfix">
-							${comps.label(table_form["serde_name"])}
-							<div class="input">
+                        <div class="alert alert-info"><h3>Configure Record Serialization</h3>
+                        </div>
+						<div class="control-group">
+							${comps.bootstrapLabel(table_form["serde_name"])}
+							<div class="controls">
 								${comps.field(table_form["serde_name"], attrs=dict(
 									placeholder='com.acme.hive.SerDe',
 					              )
@@ -178,9 +162,9 @@ ${layout.menubar(section='tables')}
 								</span>
 							</div>
 						</div>
-						<div class="clearfix">
-							${comps.label(table_form["serde_properties"])}
-							<div class="input">
+						<div class="control-group">
+							${comps.bootstrapLabel(table_form["serde_properties"])}
+							<div class="controls">
 								${comps.field(table_form["serde_properties"], attrs=dict(
 									placeholder='"prop" = "value", "prop2" = "value2"',
 					              )
@@ -195,14 +179,11 @@ ${layout.menubar(section='tables')}
 			</div>
 			<div id="step4" class="stepDetails hide">
 				<fieldset>
-					<legend>Choose a File Format</legend>
-					<div class="clearfix">
-						<div class="input">
-							Use <strong>TextFile</strong> for newline-delimited text files.
-							Use <strong>SequenceFile</strong> for Hadoop's binary serialization format.
-							Use <strong>InputFormat</strong> to choose a custom implementation.<br/>
-						</div>
-					</div>
+                    <div class="alert alert-info"><h3>Choose a File Format</h3>
+                        Use <strong>TextFile</strong> for newline-delimited text files.
+                        Use <strong>SequenceFile</strong> for Hadoop's binary serialization format.
+                        Use <strong>InputFormat</strong> to choose a custom implementation.<br/>
+                    </div>
 
 					<div class="clearfix">
 						<label id="fileFormatRadio">File format</label>

@@ -20,6 +20,10 @@
 
 </%def>
 
+<%def name="bootstrapLabel(field)">
+    <label for="${field.html_name | n}" class="control-label">${field.label | n}</label>
+</%def>
+
 <%def name="label(
   field,
   render_default=False,
