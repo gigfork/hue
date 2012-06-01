@@ -13,6 +13,7 @@
 ## WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 ## See the License for the specific language governing permissions and
 ## limitations under the License.
+#{print dict}
 <%namespace name="wrappers" file="header_footer.mako" />
 <%namespace name="comps" file="beeswax_components.mako" />
 <%
@@ -60,7 +61,7 @@ ${wrappers.head("Beeswax %s Metadata: %s" % (view_or_table_noun, table.tableName
 	    % if not is_view:
 	      <li class="jframe-clear" data-filters="CollapsingElements"><a class="bw-load_data collapser">Import Data</a>
                 <div class="collapsible jframe-hidden">
-                  <form action="${ url("beeswax.views.load_table", table=table_name) }">
+                  <form action="${ url("beeswax.views.load_table", table=table_name, database=database_name) }">
                     <dl>
                       <div class="bw-dataNote">
                       Note that loading data will move data from its location into the table's storage location.
@@ -89,8 +90,10 @@ ${wrappers.head("Beeswax %s Metadata: %s" % (view_or_table_noun, table.tableName
                 </div>
 	      </li>
 	    % endif
-            <li class="jframe-clear"><a href="${ url("beeswax.views.read_table", table=table_name) }" class="bw-browse_data">Browse Data</a></li>
-	    <li class="jframe-clear"><a href="${ url("beeswax.views.drop_table", table=table_name) }" class="bw-drop_table">Drop ${view_or_table_noun}</a></li>
+            <li class="jframe-clear"><a href="${ url("beeswax.views.read_table", table=table_name, database=database_name) }" class="bw-browse_data">Browse Data</a></li>
+      % if 0:      
+        <li class="jframe-clear"><a href="${ url("beeswax.views.drop_table", table=table_name, database=database_name) }" class="bw-drop_table">Drop ${view_or_table_noun}</a></li>
+      % endif
 	    % if not is_view:
 	      <li class="jframe-clear"><a href="${hdfs_link}" target="FileBrowser" class="tip bw-location_link" data-filters="PointyTip" data-tip-direction="11" rel="${ table.sd.location }">View File Location</a></li>
 	    % endif
@@ -117,7 +120,7 @@ ${wrappers.head("Beeswax %s Metadata: %s" % (view_or_table_noun, table.tableName
         % if len(table.partitionKeys) > 0:
           <li>
             ${column_table(table.partitionKeys)}
-            <a href="${ url("beeswax.views.describe_partitions", table=table_name) }">Show Partitions</a>
+            <a href="${ url("beeswax.views.describe_partitions", table=table_name, database=database_name) }">Show Partitions</a>
           </li>
         % endif
 	## Tab 3: Sample rows (if present)

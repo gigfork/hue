@@ -113,6 +113,7 @@ class HQLForm(forms.Form):
                           widget=forms.Textarea(attrs={'class':'beeswax_query'}))
   is_parameterized = forms.BooleanField(required=False, initial=True)
   email_notify = forms.BooleanField(required=False, initial=False)
+  database = forms.ChoiceField(label="Database Name", widget=forms.Select, initial="",choices=[(x,x) for x in db_utils.meta_client().get_all_databases()])
 
 
 class FunctionForm(forms.Form):
@@ -241,6 +242,7 @@ def _clean_terminator(val):
 class CreateByImportFileForm(forms.Form):
   """Form for step 1 (specifying file) of the import wizard"""
   # Basic Data
+  database = common.HiveIdentifierField(label="Database Name", required=True)
   name = common.HiveIdentifierField(label="Table Name", required=True)
   comment = forms.CharField(label="Description", required=False)
 

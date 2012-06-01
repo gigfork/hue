@@ -48,7 +48,7 @@ def is_selected(section, matcher):
       <li><a href="${ url('beeswax.views.list_query_history') }" 
         class="bw-nav_icon bw-history_nav ${is_selected(section, 'history')}" data-filters="ArtButton"
         data-icon-styles="{'width': 16, 'height': 16, 'top': 4, 'left': 5}">History</a></li>
-      <li><a href="${ url('beeswax.views.show_tables') }" 
+      <li><a href="${ url('beeswax.views.show_databases') }" 
         class="bw-nav_icon bw-tables_nav ${is_selected(section, 'tables')}" data-filters="ArtButton"
         data-icon-styles="{'width': 16, 'height': 16, 'top': 4, 'left': 5}">Tables</a></li>
       <li><a href="${ url('beeswax.views.configuration') }" 

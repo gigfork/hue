@@ -48,7 +48,8 @@ class QueryHistory(models.Model):
   }
 
   owner = models.ForeignKey(User, db_index=True)
-  query = models.CharField(max_length=1024)
+  query = models.CharField(max_length=60000)
+  database = models.CharField(max_length=128,default="default",null=False)
   last_state = models.IntegerField(db_index=True)
   # If true, this query will eventually return tabular results.
   has_results = models.BooleanField(default=False)

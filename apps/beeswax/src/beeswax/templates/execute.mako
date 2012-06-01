@@ -103,6 +103,14 @@ ${wrappers.head('Hive Query', section='query')}
       <div class="left_col" style="width: ${width}px;">
         <a name="settings"></a>
         <dl class="jframe_padded bw-query_settings">
+          <dt class="hue-dt_cap">Database</dt>
+          <dd class="hue-dd_bottom">
+            <dl class="hue-bw_parameters">
+            ${comps.field(form.query["database"],
+                          help = "What database should this query be executed against."
+                          )}
+            </dl>
+          </dd>
           <dt class="hue-dt_cap">Hive Settings</dt>
           <dd class="hue-dd_bottom">
             <dl>

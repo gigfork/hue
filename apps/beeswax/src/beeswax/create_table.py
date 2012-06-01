@@ -211,6 +211,7 @@ def import_wizard(request):
       #
       if do_hive_create:
         delim = s2_delim_form.cleaned_data['delimiter']
+        database = s1_file_form.cleaned_data['database']
         table_name = s1_file_form.cleaned_data['name']
         proposed_query = django_mako.render_to_string("create_table_statement.mako",
           {
@@ -225,7 +226,7 @@ def import_wizard(request):
 
         do_load_data = s1_file_form.cleaned_data.get('do_import')
         path = s1_file_form.cleaned_data['path']
-        return _submit_create_and_load(request, proposed_query, table_name, path, do_load_data)
+        return _submit_create_and_load(request, proposed_query, database, table_name, path, do_load_data)
   else:
     s1_file_form = beeswax.forms.CreateByImportFileForm()
 
@@ -235,19 +236,20 @@ def import_wizard(request):
   ))
 
 
-def _submit_create_and_load(request, create_hql, table_name, path, do_load):
+def _submit_create_and_load(request, create_hql, database, table_name, path, do_load):
   """
   Submit the table creation, and setup the load to happen (if ``do_load``).
   """
   on_success_params = { }
   if do_load:
+    on_success_params['database'] = database
     on_success_params['table'] = table_name
     on_success_params['path'] = path
     on_success_url = urlresolvers.reverse(beeswax.create_table.load_after_create)
   else:
     on_success_url = urlresolvers.reverse(describe_table, kwargs={'table': table_name})
 
-  query_msg = make_beeswax_query(request, create_hql)
+  query_msg = make_beeswax_query(request, create_hql, database)
   return execute_directly(request, query_msg,
                           on_success_url=on_success_url,
                           on_success_params=on_success_params)
@@ -418,6 +420,7 @@ def load_after_create(request):
   We get here from the create's on_success_url, and expect to find
   ``table`` and ``path`` from the parameters.
   """
+  database = request.REQUEST.get('database')
   tablename = request.REQUEST.get('table')
   path = request.REQUEST.get('path')
   if not tablename or not path:
@@ -427,7 +430,7 @@ def load_after_create(request):
 
   LOG.debug("Auto loading data from %s into table %s" % (path, tablename))
   hql = "LOAD DATA INPATH '%s' INTO TABLE `%s`" % (path, tablename)
-  query_msg = make_beeswax_query(request, hql)
-  on_success_url = urlresolvers.reverse(describe_table, kwargs={'table': tablename})
+  query_msg = make_beeswax_query(request, hql, database)
+  on_success_url = urlresolvers.reverse(describe_table, kwargs={'table': tablename, 'database': tablename})
 
   return execute_directly(request, query_msg, on_success_url=on_success_url)

@@ -41,7 +41,7 @@ class HQLdesign(object):
   want to use "$" natively, but we leave that as an advanced
   option to turn off.
   """
-  _QUERY_ATTRS = [ 'query', 'type', "is_parameterized", 'email_notify' ]
+  _QUERY_ATTRS = [ 'query', 'type', "is_parameterized", 'email_notify', 'database' ]
   _SETTINGS_ATTRS = [ 'key', 'value' ]
   _FILE_RES_ATTRS = [ 'type', 'path' ]
   _FUNCTIONS_ATTRS = [ 'name', 'class_name' ]

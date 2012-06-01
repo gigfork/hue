@@ -32,12 +32,22 @@ ${wrappers.head('Choose a File')}
               <dd>
               <p>Enter the name of your new table and a file (compressed files are okay) to base this new table definition on.</p>
               <dl class="clearfix">
+                  ${comps.field(file_form["database"], attrs=dict(
+                    klass='required bw-validate-name',
+                    data_filters="OverText",
+                    alt='database_name',
+                  ),
+                  help="Name of the database where the new table will reside.",
+                  help_attrs=dict(
+                    data_help_direction='1'
+                  )
+                )}
                 ${comps.field(file_form["name"], attrs=dict(
                   klass='required bw-validate-name',
                   data_filters="OverText",
                   alt='table_name',
                 ),
-                help="Name of the new table.  Table names must be globally unique.  Table names tend to correspond as well to the directory where the data will be stored.",
+                help="Name of the new table.  Table names must be unique within their database.  Table names tend to correspond as well to the directory where the data will be stored.",
                 help_attrs=dict(
                   data_help_direction='1'
                 )

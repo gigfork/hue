@@ -28,7 +28,7 @@ ${wrappers.head(toolbar=True)}
   <ul>
     <li><a href="${ url('beeswax.views.install_examples') }">Install examples</a></li>
     <br/>
-    <li><a href="${ url('beeswax.views.show_tables') }">Show tables</a></li>
+    <li><a href="${ url('beeswax.views.show_databases') }">Show tables</a></li>
     <li><a href="${ url('beeswax.create_table.create_table') }">Create Table</a></li>
     <br/>
     <li><a href="${ url('beeswax.views.list_designs') }">Saved Queries</a></li>

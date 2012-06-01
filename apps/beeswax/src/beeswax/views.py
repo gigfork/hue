@@ -53,19 +53,24 @@ from filebrowser.views import location_to_url
 LOG = logging.getLogger(__name__)
 
 def index(request):
-  tables = db_utils.meta_client().get_tables("default", ".*")
+  # I think this is here to govern 
+  tables = db_utils.meta_client().get_tables("bi", ".*")
   if not tables:
     return render("index.mako", request, {})
   else:
     return execute_query(request)
 
-def show_tables(request):
-  tables = db_utils.meta_client().get_tables("default", ".*")
-  examples_installed = beeswax.models.MetaInstall.get().installed_example
-  return render("show_tables.mako", request, dict(tables=tables, examples_installed=examples_installed))
+def show_databases(request):
+   databases = db_utils.meta_client().get_all_databases()
+   return render("show_databases.mako", request, dict(databases=databases))
 
-def describe_table(request, table):
-  table_obj = db_utils.meta_client().get_table("default", table)
+def show_tables(request, database):
+  tables = db_utils.meta_client().get_tables(database, ".*")
+  examples_installed = beeswax.models.MetaInstall.get().installed_example
+  return render("show_tables.mako", request, dict(database=database, tables=tables, examples_installed=examples_installed))
+
+def describe_table(request, table, database):
+  table_obj = db_utils.meta_client().get_table(database, table)
   sample_results = None
   is_view = table_obj.tableType == 'VIRTUAL_VIEW'
 
@@ -73,7 +78,7 @@ def describe_table(request, table):
   if not is_view:
     # Show the first few rows
     hql = "SELECT * FROM `%s` %s" % (table, _get_browse_limit_clause(table_obj))
-    query_msg = make_beeswax_query(request, hql)
+    query_msg = make_beeswax_query(request, hql, database)
     try:
       sample_results = db_utils.execute_and_wait(request.user, query_msg, timeout_sec=5.0)
     except:
@@ -89,16 +94,17 @@ def describe_table(request, table):
       top_rows=sample_results and list(parse_results(sample_results.data)) or None,
       hdfs_link=hdfs_link,
       load_form=load_form,
-      is_view=is_view
+      is_view=is_view,
+      database_name=database
   ))
 
-def drop_table(request, table):
-  table_obj = db_utils.meta_client().get_table("default", table)
+def drop_table(request, database, table):
+  table_obj = db_utils.meta_client().get_table( database, table)
   is_view = table_obj.tableType == 'VIRTUAL_VIEW'
 
   if request.method == 'GET':
     # It may be possible to determine whether the table is
-    # external by looking at db_utils.meta_client().get_table("default", table).tableType,
+    # external by looking at db_utils.meta_client().get_table( "bi", table).tableType,
     # but this was introduced in Hive 0.5, and therefore may not be available
     # with older metastores.
     if is_view:
@@ -111,7 +117,7 @@ def drop_table(request, table):
       hql = "DROP VIEW `%s`" % (table,)
     else:
       hql = "DROP TABLE `%s`" % (table,)
-    query_msg = make_beeswax_query(request, hql)
+    query_msg = make_beeswax_query(request, hql, database)
     try:
       return execute_directly(request,
                                query_msg,
@@ -123,11 +129,11 @@ def drop_table(request, table):
       raise PopupException(error, title="Beeswax Error", detail=log)
 
 
-def read_table(request, table):
+def read_table(request, database, table):
   """View function for select * from table"""
-  table_obj = db_utils.meta_client().get_table("default", table)
+  table_obj = db_utils.meta_client().get_table( database, table)
   hql = "SELECT * FROM `%s` %s" % (table, _get_browse_limit_clause(table_obj))
-  query_msg = make_beeswax_query(request, hql)
+  query_msg = make_beeswax_query(request, hql, database)
   try:
     return execute_directly(request, query_msg, tablename=table)
   except BeeswaxException, e:
@@ -193,13 +199,13 @@ def safe_get_design(request, design_type, design_id=None):
   return design
 
 
-def make_beeswax_query(request, hql, query_form=None):
+def make_beeswax_query(request, hql, database, query_form=None):
   """
   make_beeswax_query(request, hql, query_type, query_form=None) -> BeeswaxService.Query object
 
   It sets the various configuration (file resources, fuctions, etc) as well.
   """
-  query_msg = BeeswaxService.Query(query=hql, configuration=[])
+  query_msg = BeeswaxService.Query(query=hql, configuration=[], database=database)
 
   # Configure running user and group.
   query_msg.hadoop_user = request.user.username
@@ -221,7 +227,7 @@ def make_beeswax_query(request, hql, query_form=None):
 
 
 def execute_directly(request, query_msg, design=None, tablename=None,
-                     on_success_url=None, on_success_params=None, **kwargs):
+                     on_success_url=None, on_success_params=None, database=None, **kwargs):
   """
   execute_directly(request, query_msg, tablename, design) -> HTTP response for execution
 
@@ -314,13 +320,14 @@ def execute_query(request, design_id=None):
         break
 
       query_str = _strip_trailing_semicolon(form.query.cleaned_data["query"])
+      database = form.query.cleaned_data["database"]
 
       # (Optional) Parameterization.
       parameterization = get_parameterization(request, query_str, form.query, design, to_explain)
       if parameterization:
         return parameterization
 
-      query_msg = make_beeswax_query(request, query_str, form)
+      query_msg = make_beeswax_query(request, query_str, database, form)
       try:
         if to_explain:
           return explain_directly(request, query_str, query_msg, design)
@@ -402,13 +409,14 @@ def _run_parameterized_query(request, design_id, explain):
   query_form.bind(design_obj.get_query_dict())
   assert query_form.is_valid()
   query_str = _strip_trailing_semicolon(query_form.query.cleaned_data["query"])
+  database =query_form.query.cleaned_data["database"]
   parameterization_form_cls = make_parameterization_form(query_str)
   if not parameterization_form_cls:
     raise PopupException("Query is not parameterizable.")
   parameterization_form = parameterization_form_cls(request.REQUEST, prefix="parameterization")
   if parameterization_form.is_valid():
     real_query = substitute_variables(query_str, parameterization_form.cleaned_data)
-    query_msg = make_beeswax_query(request, real_query, query_form)
+    query_msg = make_beeswax_query(request, real_query, database, query_form)
     try:
       if explain:
         return explain_directly(request, query_str, query_msg, design)
@@ -745,7 +753,7 @@ def watch_query(request, id):
                     })
 
 
-def make_query_context(type, info):
+def make_query_context(type, info, database=None):
   """
   ``type`` is one of "table" and "design", and ``info`` is the table name or design id.
   Returns a value suitable for GET param.
@@ -988,7 +996,7 @@ def _save_results_ctas(request, query_history, target_table, result_meta):
   # Case 1: The results are straight from an existing table
   if result_meta.in_tablename:
     hql = 'CREATE TABLE `%s` AS SELECT * FROM %s' % (target_table, result_meta.in_tablename)
-    query_msg = make_beeswax_query(request, hql)
+    query_msg = make_beeswax_query(request, hql, 'default')
     # Display the CTAS running. Could take a long time.
     return execute_directly(request, query_msg, on_success_url=urlresolvers.reverse(show_tables))
 
@@ -1017,12 +1025,12 @@ def _save_results_ctas(request, query_history, target_table, result_meta):
         STORED AS TextFile
         ''' % (target_table, cols, delim.zfill(3))
 
-  query_msg = make_beeswax_query(request, hql)
+  query_msg = make_beeswax_query(request, hql, 'default')
   db_utils.execute_and_wait(request.user, query_msg)
 
   try:
     # 2. Move the results into the table's storage
-    table_obj = db_utils.meta_client().get_table("default", target_table)
+    table_obj = db_utils.meta_client().get_table( "default", target_table)
     table_loc = request.fs.urlsplit(table_obj.sd.location)[2]
     request.fs.rename_star(result_meta.table_dir, table_loc)
     LOG.debug("Moved results from %s to %s" % (result_meta.table_dir, table_loc))
@@ -1030,7 +1038,7 @@ def _save_results_ctas(request, query_history, target_table, result_meta):
     query_history.save_state(models.QueryHistory.STATE.expired)
   except Exception, ex:
     LOG.error('Error moving data into storage of table %s. Will drop table.' % (target_table,))
-    query_msg = make_beeswax_query(request, 'DROP TABLE `%s`' % (target_table,))
+    query_msg = make_beeswax_query(request, 'DROP TABLE `%s`' % (target_table,),"default")
     try:
       db_utils.execute_directly(request.user, query_msg)        # Don't wait for results
     except Exception, double_trouble:
@@ -1041,11 +1049,11 @@ def _save_results_ctas(request, query_history, target_table, result_meta):
   return format_preserving_redirect(request, urlresolvers.reverse(show_tables))
 
 
-def load_table(request, table):
+def load_table(request, database, table):
   """
   Loads data into a table.
   """
-  table_obj = db_utils.meta_client().get_table("default", table)
+  table_obj = db_utils.meta_client().get_table( database, table)
   if request.method == "POST":
     form = beeswax.forms.LoadDataForm(table_obj, request.POST)
     if form.is_valid():
@@ -1065,7 +1073,7 @@ def load_table(request, table):
         hql += ", ".join(vals)
         hql += ")"
 
-      on_success_url = urlresolvers.reverse(describe_table, kwargs={'table': table})
+      on_success_url = urlresolvers.reverse(describe_table, kwargs={'table': table,'database': database})
       return confirm_query(request, hql, on_success_url)
   else:
     form = beeswax.forms.LoadDataForm(table_obj)
@@ -1091,11 +1099,11 @@ def install_examples(request):
     return format_preserving_redirect(request, '/beeswax/tables')
 
 
-def describe_partitions(request, table):
-  table_obj = db_utils.meta_client().get_table("default", table)
+def describe_partitions(request, database, table):
+  table_obj = db_utils.meta_client().get_table( database, table)
   if len(table_obj.partitionKeys) == 0:
     raise PopupException("Table '%s' is not partitioned." % table)
-  partitions = db_utils.meta_client().get_partitions("default", table, max_parts=-1)
+  partitions = db_utils.meta_client().get_partitions( database, table, max_parts=-1)
   return render("describe_partitions.mako", request,
                 dict(table=table_obj, partitions=partitions, request=request))
 

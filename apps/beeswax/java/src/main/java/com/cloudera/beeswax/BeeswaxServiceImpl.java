@@ -210,6 +210,7 @@ public class BeeswaxServiceImpl implements BeeswaxService.Iface {
 
     private void checkedCompile() throws BeeswaxException {
       // Run through configuration commands
+      query.configuration.add("USE "+query.getDatabase());
       for (String cmd : query.configuration) {
         // This is pretty whacky; SET and ADD get treated differently
         // than CREATE TEMPORARY FUNCTION...  The trimming logic
@@ -217,6 +218,7 @@ public class BeeswaxServiceImpl implements BeeswaxService.Iface {
         String cmd_trimmed = cmd.trim();
         String[] tokens = cmd_trimmed.split("\\s+");
         String cmd1 = cmd_trimmed.substring(tokens[0].length()).trim();
+
         CommandProcessor p = CommandProcessorFactory.get(tokens[0]);
         int res;
         if (p instanceof Driver) {
@@ -231,6 +233,7 @@ public class BeeswaxServiceImpl implements BeeswaxService.Iface {
 
       // Note that driver.compile() talks to HDFS, so it's
       // not as quick as one might think.
+      LOG.info(query.query);
       int compileRes = driver.compile(query.query);
       if (compileRes != 0) {
         throwException(new BeeswaxException(getErrorStreamAsString(),
